@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title>个人信息</title>
+		<style>
+			ul,
+			li {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			p,
+			span,
+			input {
+				font-size: 15px;
+				font-weight: 200;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			body {
+				background: #F7F7F7;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">修改密码</span>
+			</div>
+			<input v-model="old_pwd" type="password" placeholder="请输入当前密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;"/>
+			
+			<input v-model="new_pwd_1" type="password" placeholder="请输入新密码" style="width: 94%;height: 40px;margin-top: 10px;margin-left: 3%;padding-left: 10px;outline: none;"/>
+			
+			<input v-model="new_pwd_2" type="password" placeholder="请再次输入新密码" style="width: 94%;height: 40px;margin-top: 10px;margin-left: 3%;padding-left: 10px;outline: none;"/>
+		
+			<p @click="changePwd()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;margin-top: 40px;border-radius: 4px;">确认</p>
+		</div>
+	</body>
+	<script>
+		var datas = new Array();
+		var num = 0;
+		var app = new Vue({
+			el:"#id_app",
+			data:{
+				old_pwd:'',
+				new_pwd_1:'',
+				new_pwd_2:''
+			},
+			methods:{
+				changePwd(){
+					var that = this;
+					console.log("new_pwd_1: " + that.new_pwd_1 + " new_pwd_2: " + that.new_pwd_2 + "  old_pwd:" + that.old_pwd)
+					if(that.new_pwd_1 != that.new_pwd_2 || that.old_pwd == ""){
+						alert("输入非法");
+						return;
+					}
+					ajax({
+						method: 'POST',
+						url: CHANGE_PWD + "?access-token=" + localStorage.getItem('access-token'),
+						data:{
+							password_old:that.old_pwd,
+							password_new:that.new_pwd_1
+						},
+						success: function(obj) {
+							alert(obj.message)
+						}
+					})
+				}
+			}
+		});
+	</script>
+</html>

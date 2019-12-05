@@ -17,3 +17,5 @@ var PACKAGE_LIST = host + "task/package-list";
 var SUBMIT_TASK = host + "task/submit-task";
 
 var MY_TEAM = host + "member/my-team";
+
+var CHANGE_PWD = host + "member/update-password";

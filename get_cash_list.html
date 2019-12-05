@@ -38,11 +38,11 @@
 				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;">资金明细</span>
 			</div>
-			<div style="width: 100%;height: 140px;background: blue;">
+			<div style="width: 100%;background: url(img/bg_capital.png);background-size: 100% 100%;">
 				<p style="text-align: center;color: #FFFFFF;font-weight: 400;font-size: 20px;padding-top: 50px;">¥ {{total_money}}</p>
-				<p style="text-align: center;color: #FFFFFF;font-size: 12px;">共计收益</p>
+				<p style="text-align: center;color: #FFFFFF;font-size: 12px;padding-bottom: 50px;">共计收益</p>
 			</div>
-			<ul style="margin-top: 3%;">
+			<ul>
 				<li v-for="data in datas" style="background: #FFFFFF;line-height: 30px;padding-left: 12px;padding-right: 12px;border-bottom: #E5E5E5 solid 1px;">
 					<div>
 						<span>{{data.remake}}</span>
@@ -61,6 +61,9 @@
 			data:{
 				// datas:datas,
 				datas:[
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
 					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
 					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
 					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
