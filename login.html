@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, 
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<title>登录</title>
+		<style>
+			.div_body{
+				margin-top: 40px;
+			}
+			.img_sy{
+				width: 40%;
+				margin-left: 30%;
+				text-align: center;
+			}
+			.login_btn{
+				margin-top: 30px;
+				height: 40px;
+				background: #2AABD2;
+				color: #FFFFFF;
+				border: none;
+				border-radius: 4px;
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid div_body">
+			<img class="img-circle img_sy" src="img/WechatIMG13.jpeg">
+			<div class="input-group input-group-lg" style="margin-top: 30px;">
+				<span class="input-group-addon" id="basic-addon1">手机</span>
+				<input id="id_account" type="number" class="form-control" placeholder="请输入手机号码" aria-describedby="basic-addon1">
+			</div>
+
+			<div class="input-group input-group-lg" style="margin-top: 10px;">
+				<span class="input-group-addon" id="basic-addon1">密码</span>
+				<input id="id_password" type="password" class="form-control" placeholder="请输入登录密码" aria-describedby="basic-addon1">
+			</div>
+
+			<button id="login_btn" type="button" class="btn-block login_btn">立 即 登 录</button>
+		</div>
+
+	</body>
+	<script>
+		if(localStorage.getItem('access-token') != null){
+			access_token = localStorage.getItem('access-token');
+			location.href = "app_index.html";
+		}
+		
+		$("#login_btn").click(function() {
+			ajax({
+				method: 'POST',
+				url: LOGIN,
+				data:{
+					username:'xinykj',//$("#id_account").val()
+					password:$("#id_password").val()
+				},
+				success: function(obj) {
+					if(obj.success){
+						access_token = obj.data['access-token'];
+						localStorage.setItem('access-token',access_token)
+						location.href = "app_index.html";
+					}else{
+						alert(obj.message)
+					}
+				}
+			})
+			// location.href = "main.html";
+		});
+	</script>
+</html>

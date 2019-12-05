@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title>个人信息</title>
+		<style>
+			ul,
+			li {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			p,
+			span {
+				font-size: 15px;
+				font-weight: 100;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			body {
+				background: #F7F7F7;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">个人信息</span>
+			</div>
+			
+			<ul style="margin-top: 3%;">
+				<li v-for="data in datas" style="background: #FFFFFF;height: 50px;line-height: 50px;padding-left: 12px;padding-right: 5px;border-bottom: #E5E5E5 solid 1px;">
+					<div>
+						<span>{{data.key}}</span>
+						<img style="height: 50px;width: 50px;float: right;padding: 16px;" src="img/icon_more.png" >
+						<span style="font-size: 15px;float: right;">{{data.value}}</span>
+					</div>
+				</li>
+			</ul>
+			<p style="width: 90%;margin-left: 5%;height: 50px;line-height: 50px;background: #1FB2F6;text-align: center;margin-top: 30px;color: #FFFFFF;border-radius: 4px;">退出系统</p>
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el:"#id_app",
+			data:{
+				datas:[
+					{key:"姓名",value:"凡天才"},
+					{key:"手机",value:"15114754033"},
+					{key:"性别",value:"男"},
+					{key:"地址",value:"湖南-长沙-天心区"},
+					{key:"收款信息",value:"6217002922155625"},
+				]
+			}
+		});
+	</script>
+</html>

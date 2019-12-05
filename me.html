@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title></title>
+		<style>
+			p,
+			span {
+				font-weight: 100;
+			}
+			.item{
+				width: 32%;
+				display: inline-block;
+				height: 60px;
+			}
+			.item_value{
+				width: 100%;
+				text-align: center;
+				color: #FF3159;
+				font-weight: 300;
+				margin-top: 10px;
+			}
+			.item_key{
+				width: 100%;
+				text-align: center;
+				font-weight: 400;
+				margin-top: -6px;
+			}
+			.menu_img{
+				width: 20%;
+				margin-left: 40%;
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+	<body style="background: #F7F7F7;">
+		<div id="id_app">
+			<div style="background: url(img/me_bg.png); background-size: 100% 100%;">
+				<img style="width: 24px;height: 24px;margin-left: 90%;margin-top: 20px;" src="img/icon_setting.png" />
+				<div style="color: #FFFFFF;">
+					<img class="img-circle" style="height: 70px;width: 70px;margin-left: 20px;" src="img/WechatIMG13.jpeg" />
+					<div style="display: inline-block;height: 70px;position: absolute;left: 100px;">
+						<span>{{userName}}</span>
+						<span style="border-radius: 12px; border: #FFFFFF solid 1px;text-align: center;margin-left: 10px;padding-left: 10px;padding-right: 10px;">{{vip_level}}</span>
+						<p style="margin-top: 6px;">{{user_phone}}</p>
+						<p style="margin-top: -8px;">到期: {{time}}</p>
+					</div>
+					<p style="height: 80px;"></p>
+				</div>
+				<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 134px;border-radius: 8px;">
+					<div v-for="item in items" class="item">
+						<p class="item_value">{{item.value}}</p>
+						<p class="item_key">{{item.key}}</p>
+					</div>
+					<p style="height: 4px;"></p>
+				</div>
+			
+			<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 334px;border-radius: 8px;">
+				<div v-for="menu in menus" class="item">
+					<img :src="menu.img" class="menu_img" />
+					<p class="item_key">{{menu.name}}</p>
+				</div>
+				<p style="height: 4px;"></p>
+			</div>
+				
+			</div>
+			
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el: "#id_app",
+			data: {
+				userName:"凡天才",
+				vip_level:"年卡",
+				user_phone:"15111475403",
+				time:"2019/12/12 12:00:13",
+				items: [
+					{key:'任务收益',value:'¥ 4.5'},
+					{key:'可用余额',value:'¥ 4500'},
+					{key:'任务佣金',value:'0 个'},
+					{key:'可做任务',value:'0 个'},
+					{key:'推荐奖励',value:'0 个'},
+					{key:'团队人数',value:'4 个'},
+					{key:'今日完成任务',value:'2 个'},
+					{key:'今日收益',value:'¥ 4.5'}
+				],
+				menus:[
+					{name:'升级记录',img:"img/menu_icon_level.png"},
+					{name:'我的团队',img:"img/menu_icon_team.png"},
+					{name:'发布任务',img:"img/menu_icon_rel_task.png"},
+					{name:'我的任务',img:"img/menu_icon_my_task.png"},
+					{name:'新闻公告',img:"img/menu_icon_news.png"},
+					{name:'提现账户',img:"img/menu_icon_account.png"},
+					{name:'提现记录',img:"img/menu_icon_txjl.png"},
+					{name:'资金明细',img:"img/menu_icon_zjmx.png"},
+					{name:'推广赚钱',img:"img/menu_icon_tgzq.png"},
+					{name:'修改密码',img:"img/menu_icon_xgmm.png"},
+				]
+			},
+			methods: {
+
+			}
+		});
+	</script>
+</html>

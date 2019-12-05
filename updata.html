@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/updata_pay.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<style>
+			p,
+			span,
+			input{
+				font-weight: 100;
+			}
+
+			body {
+				background: #F7F7F7;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">立即升级</span>
+				<span style="position: absolute;right: 20px;line-height: 50px;">升级记录</span>
+				<img style="width: 60%;margin-left: 20%;" src="img/WechatIMG13.jpeg" />
+			</div>
+
+			<p style="width: 90%;margin-left: 5%;text-align: center;height: 40px;line-height: 40px;background: #8BC34A;color: #FFFFFF;margin-top: 10px;">保存二维码图片</p>
+
+			<p style="margin-left: 5%;margin-right: 5%;">
+				{{levelName}}:            ¥  {{levelPrice}}<br />
+			</p>
+
+			<p style="margin-left: 5%;margin-right: 5%;">
+				1.保存支付宝收款码<br />
+				2.进入支付宝,点击扫一扫,扫描图片,输入对应的金额,备注中添加您的手机号<br />
+				3.系统自动升级会员账号
+			</p>
+			<input v-model="alipayAccount" placeholder="请输入您的支付宝账号" type="text" style="border: #E8E8E8 solid 1px;width: 90%;margin-left: 5%;height: 40px;padding-left: 10px;outline: none;" />
+			<p @click="submit()" style="width: 90%;margin-left: 5%;text-align: center;height: 40px;line-height: 40px;background: #FF9800;color: #FFFFFF;margin-top: 10px;">提交</p>
+		</div>
+	</body>
+	<script>
+		var levelName = GetQueryString('levelName');
+		var levelPrice = GetQueryString('levelPrice');;
+		var app = new Vue({
+			el: "#id_app",
+			data: {
+				levelName:levelName,
+				levelPrice:levelPrice,
+				alipayAccount:''
+			},
+			methods: {
+				submit:function(){
+				}
+			}
+		});
+	</script>
+</html>

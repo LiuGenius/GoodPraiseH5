@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title>消息中心</title>
+		<style>
+			ul,
+			li {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			p,
+			span {
+				font-size: 15px;
+				font-weight: 200;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			body {
+				background: #F7F7F7;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">消息中心</span>
+			</div>
+			<ul style="margin-top: 3%;">
+				<li v-for="data in datas" style="background: #FFFFFF;height: 50px;line-height: 50px;padding-left: 12px;padding-right: 5px;border-bottom: #E5E5E5 solid 1px;">
+					<div>
+						<span>{{data.message_name}}</span>
+						<img style="height: 50px;width: 50px;float: right;padding: 16px;" src="img/icon_more.png" >
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script>
+		var datas = new Array();
+		var app = new Vue({
+			el:"#id_app",
+			data:{
+				// datas:datas,
+				datas:[
+					{message_name:'系统升级通知',ID:'1'},
+					{message_name:'会员上传作品操作末班',ID:'2'},
+					{message_name:'重要通知',ID:'3'},
+					{message_name:'封号公告',ID:'4'},
+				],
+			},
+			mounted(){
+				// this.getData();
+			},
+			methods:{
+				getData(){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: MY_TEAM + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							if (obj.success) {
+								for (var i = 0; i < obj.data.length; i++) {
+									var message = obj.data[i];
+									datas.push(that.message(message.message_name,user.ID));
+								}
+							} else {
+								alert(obj.message)
+							}
+						}
+					})
+				},
+				userData(message_name,ID){
+					var message = new Object();
+					message.message_name = message_name;
+					message.ID = ID;
+					return message;
+				}
+			}
+		});
+	</script>
+</html>

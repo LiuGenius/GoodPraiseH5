@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name='viewport' content='width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no'>
+		<meta charset='utf-8' />
+		<script src='http://libs.baidu.com/jquery/2.1.4/jquery.min.js'></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/task.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	</head>
+	<style>
+		ul,
+		li {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		p,
+		span {
+			font-size: 12px;
+			font-weight: 100;
+			padding: 0px;
+			margin: 0px;
+		}
+
+		body {
+			background: #F7F7F7;
+		}
+
+		.tab {
+			width: 49%;
+			display: inline-block;
+			text-align: center;
+			height: 40px;
+			line-height: 40px;
+		}
+
+		.item_btn {
+			background: #FF3159;
+			color: #FFFFFF;
+			padding: 5px 10px 5px 10px;
+			border-radius: 4px;
+		}
+		.item_bg{
+			background: #FFFFFF;
+			margin: 2%;
+			border-radius: 4px;
+			width: 96%;
+		}
+	</style>
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<div class="tab">
+					<img style="width: 12px;" src='img/douying.png' />
+					<span @click="clickTab(0)">待完成</span>
+				</div>
+				<div class="tab">
+					<img style="width: 12px;" src='img/douying.png' />
+					<span @click="clickTab(2)">已完成</span>
+				</div>
+			</div>
+			<!-- 待完成 -->
+			<ul v-if="showStatus">
+				<li v-for="data in taskDatas">
+					<div class="item_bg">
+						<img :src="data.img" style="margin-left: 12px;width: 60px;margin-bottom: 30px;" />
+						<ul style="margin-top: 0px;display: inline-block;margin-left: 15px;">
+							<li style="height: 30px;padding-top: 15px;"><span>任务要求: {{data.task_name}}</span><span style="font-weight: bold;color: #FF3159;float: right;">¥
+									{{data.integral}}</span></li>
+							<li style="height: 30px;padding-top: 10px;"><span>发布时间: {{data.add_time}}</span></li>
+							<li style="height: 30px;padding-top: 5px;">
+								<span @click="openVideo(data.link)" class="item_btn">打开链接</span>
+								<span @click="copyUrl(data.link)" class="item_btn">复制链接</span>
+								<span @click="submitTask(data.ID,data.task_name,data.integral)" class="item_btn">提交任务</span>
+							</li>
+						</ul>
+
+					</div>
+				</li>
+			</ul>
+			<!-- 已完成 -->
+			<ul v-if="!showStatus">
+				<li v-for="data in taskDatas">
+					<div style="padding: 2%;" class="item_bg">
+						<span>{{data.task_name}}</span> <span style='float: right;'>已完成</span>
+						<p style='color: #bbbbbb;margin-top: 8px;'>任务收益: ¥{{data.integral}}</p>
+						<p style='color: #bbbbbb;'>申请时间: {{data.add_time}}</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+
+	</body>
+
+	<script>
+		var taskDatas = new Array();
+
+		var app = new Vue({
+			el: "#id_app",
+			data: {
+				showStatus: true,
+				taskDatas: taskDatas,
+			},
+			mounted(){
+				this.getData(0);
+			},
+			methods: {
+				clickTab: function(tag) {
+					taskDatas.splice(0,taskDatas.length)
+					this.showStatus = (tag == 0);
+					this.getData(tag);
+				},
+				openVideo: function(url) {
+					location.href = url;
+				},
+				copyUrl: function(url) {
+					let oInput = document.createElement('input')
+					oInput.value = url;
+					document.body.appendChild(oInput)
+					oInput.select()
+					document.execCommand("Copy")
+					oInput.style.display = 'none'
+					document.body.removeChild(oInput)
+					window.alert('复制成功')
+				},
+				submitTask: function(v1, v2, v3) {
+					location.href = "submit_task.html?id=" + v1 + "&taskName=" + v2 + "&taskMoney=" + v3;
+				},
+				Task: function(ID, add_time, img, link, name, task_name, weixin, integral) {
+					var task = new Object();
+					task.ID = ID;
+					task.add_time = add_time;
+					task.img = img;
+					task.link = link;
+					task.name = name;
+					task.task_name = task_name;
+					task.weixin = weixin;
+					task.integral = integral;
+				
+					return task;
+				},
+				getData(status){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: MY_TASK_LIST + "?access-token=" + localStorage.getItem('access-token'),
+						data: {
+							status: status
+						},
+						success: function(obj) {
+							if (obj.success) {
+								
+								for (var i = 0; i < obj.data.length; i++) {
+									var taskJson = obj.data[i];
+									taskDatas.push(that.Task(
+										taskJson.Id,
+										taskJson.add_time,
+										taskJson.img,
+										taskJson.link,
+										taskJson.name,
+										taskJson.task_name,
+										taskJson.weixin,
+										taskJson.integral
+									));
+								}
+							}
+						}
+					})
+				}
+			}
+		});
+	</script>
+</html>

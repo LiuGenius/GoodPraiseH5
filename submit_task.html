@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/updata_pay.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title></title>
+		<style type="text/css">
+			p,
+			span,
+			input {
+				font-weight: 100;
+			}
+
+			body {
+				background: #F7F7F7;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">提交任务</span>
+			</div>
+
+			<p style="margin-left: 10px;margin-top: 20px;">任务名称: {{taskName}}</p>
+			<p style="margin-left: 10px;margin-top: 10px;">任务金额: ¥ {{taskMoney}}</p>
+			<p style="margin-left: 10px;margin-top: 10px;">完成状态: 未完成</p>
+
+			<img id="id_img" @click="chooseFile()" style="width: 86%;margin-left: 7%;" src="img/icon_add_img.png" />
+			<p @click="submit()" style="width: 70%;margin-left: 15%;text-align: center;height: 40px;line-height: 40px;background: #4287FF;color: #FFFFFF;margin-top: 20px;border-radius: 4px;">提交</p>
+			<input onchange="showPicture(this)" style="display: none;" accept="image/*" v-model="filePath" id="id_file" type="file" />
+		</div>
+	</body>
+	<script>
+		var filePath;
+		var ID = GetQueryString("id");
+		var taskName = GetQueryString("taskName");
+		var taskMoney = GetQueryString("taskMoney");
+		var app = new Vue({
+			el: "#id_app",
+			data: {
+				filePath: filePath,
+				taskName: taskName,
+				taskMoney: taskMoney
+			},
+			methods: {
+				submit: function() {
+					ajax({
+						method: 'POST',
+						url: SUBMIT_TASK + "?access-token=" + localStorage.getItem('access-token'),
+						data: {
+							img: filePath,
+							id:ID
+						},
+						success: function(obj) {
+							if (obj.success) {
+								
+							} else {
+								alert(obj.message)
+							}
+						}
+					})
+				},
+				chooseFile: function() {
+					document.getElementById("id_file").click();
+				}
+			}
+		});
+
+		function getObjectURL(file) {
+			var url = null;
+			if (window.createObjcectURL != undefined) {
+				url = window.createObjcectURL(file);
+			} else if (window.URL != undefined) {
+				url = window.URL.createObjectURL(file);
+			} else if (window.webkitURL != undefined) {
+				url = window.webkitURL.createObjectURL(file);
+			}
+			return url;
+		}
+
+		function showPicture(imgFile) {
+			document.getElementById("id_img").src = window.URL.createObjectURL(imgFile.files[0]);
+		}
+	</script>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<title></title>
+		<style>
+			.div_tab {
+				position: fixed;
+				left: auto;
+				right: auto;
+				bottom: 0;
+				_position: absolute;
+				_top: expression(document.documentElement.clientHeight + document.documentElement.scrollTop - this.offsetHeight);
+				z-index: 1000;
+				font-size: 11px;
+				line-height: 28px;
+				height: 60px;
+				padding: 2px 15px 0 15px;
+				width: 100%;
+				margin: 0 auto;
+				background: #F7F7F7;
+			}
+
+			iframe {
+				margin-bottom: 60px;
+				width: 100%;
+			}
+
+			.tab_item {
+				width: 24%;
+				text-align: center;
+				font-size: 12px;
+				display: inline-block;
+			}
+
+			.tab_item_img {
+				width: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<iframe frameborder="0" scrolling="no" name="headFrame" onload="this.height=this.contentWindow.document.documentElement.scrollHeight"></iframe>
+
+		<div class="div_tab">
+			<div onclick="onclickTab(0)" class="tab_item">
+				<img class="tab_item_img" src="img/douying.png">
+				<p>首页</p>
+			</div>
+			<div onclick="onclickTab(1)" class="tab_item">
+				<img class="tab_item_img" src="img/douying.png">
+				<p>任务</p>
+			</div>
+			<div onclick="onclickTab(2)" class="tab_item">
+				<img class="tab_item_img" src="img/douying.png">
+				<p>购买</p>
+			</div>
+			<div onclick="onclickTab(3)" class="tab_item">
+				<img class="tab_item_img" src="img/douying.png">
+				<p>我的</p>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		function onclickTab(index) {
+			switch (index) {
+				case 0:
+					$('iframe').attr("src", "main.html");
+					break;
+				case 1:
+					$('iframe').attr("src", "task.html");
+					break;
+				case 2:
+					$('iframe').attr("src", "updata_pay.html");
+					break;
+				case 3:
+					$('iframe').attr("src", "me.html");
+					break;
+			}
+		}
+	</script>
+</html>

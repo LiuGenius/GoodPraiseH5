@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title></title>
+		<style>
+			ul,
+			li {
+				padding: 0;
+				margin: 0;
+				list-style: none
+			}
+			p,span{
+				font-weight: 100;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="id_app">
+			
+			<ul id="id_list" style="margin: 2%;">
+				<li style="color: #FFFFFF;margin: 1%;overflow: hidden;" v-for="(data,index) in datas ">
+					<!-- <img src="img/季度卡.png" style="width: 100%;"/> -->
+					<div :style="`padding: 3% 3% 0% 3%;background: url(img/${data.img}.png);background-size: 100% 100%;`">
+						<span style="font-weight: bold;">{{data.name}}</span>
+						<span style="position: absolute;right: 20px;">会员费: {{data.price}}元</span>
+						<p style="margin-left: 20px;margin-top: 20px;">每天可做任务: {{data.task_count}}个</p>
+						<p style="margin-left: 20px;margin-top: -4px;">{{data.description}}</p>
+						<p style="margin-left: 20px;margin-top: -4px;">直接邀请同伴奖励: 20 %</p>
+						<p @click="pay(data.name,data.price)" style="width: 100%;text-align: center;height: 40px;line-height: 40px;">立即升级</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+
+
+	</body>
+	<script>
+		function updata_pay(ID,add_time,description,name,price,sort,status,task_count,type,img){
+			var data = new Object();
+			data.ID = ID;
+			data.add_time = add_time;
+			data.description = description;
+			data.name = name;
+			data.price = price;
+			data.sort = sort;
+			data.status = status;
+			data.task_count = task_count;
+			data.type = type;
+			data.img = img;
+			return data;
+		}
+		
+		var datas = new Array();
+		var imgArrays = ["level_1","level_2","level_3"];
+		var app = new Vue({
+			el: "#id_app",
+			data: {
+				datas: datas,
+			},
+			methods:{
+				pay:function(levelName,levelPrice){
+					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + levelPrice);
+				}
+			}
+		});
+
+		ajax({
+			method: 'POST',
+			url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
+			success: function(obj) {
+				if (obj.success) {
+					console.log(obj)
+					for (var i = 0; i < obj.data.list.length; i++) {
+						var taskJson = obj.data.list[i];
+						datas.push(new updata_pay(
+							taskJson.ID,
+							taskJson.add_time,
+							taskJson.description,
+							taskJson.name,
+							taskJson.price,
+							taskJson.sort,
+							taskJson.status,
+							taskJson.task_count,
+							taskJson.type,
+							imgArrays[i % 3]
+						));
+					}
+					console.log(datas)
+				} else {
+					alert(obj.message)
+				}
+			}
+		})
+		
+		
+		
+	</script>
+</html>
