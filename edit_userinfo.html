@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, 
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/mobileSelect.css">
+		<script src="js/mobileSelect.js" type="text/javascript"></script>
+
+	</head>
+	<body>
+		<div style="font-size: 20px;" id="trigger2"></div>
+
+
+	</body>
+	<script type="text/javascript">
+		var mobileSelect2 = new MobileSelect({
+			trigger: '#trigger2',
+			title: '地区选择',
+			wheels: [{
+				data: [{
+						id: '1',
+						value: '附近',
+						childs: [
+			{value: "合肥市"},
+			{value: "芜湖市"},
+			{value: "蚌埠市"},
+			{value: "淮南市"},
+			{value: "马鞍山市"},
+			{value: "淮北市"},
+			{value: "铜陵市"},
+			{value: "安庆市"},
+			{value: "黄山市"},
+			{value: "滁州市"},
+			{value: "阜阳市"},
+			{value: "宿州市"},
+			{value: "巢湖市"},
+			{value: "六安市"},
+			{value: "亳州市"},
+			{value: "池州市"},
+			{value: "宣城市"}
+		]
+					},
+					{
+						id: '2',
+						value: '上城区'
+					},
+					{
+						id: '3',
+						value: '下城区'
+					},
+					{
+						id: '4',
+						value: '江干区'
+					},
+					{
+						id: '5',
+						value: '拱墅区'
+					},
+					{
+						id: '6',
+						value: '西湖区'
+					}
+				]
+			}],
+			callback: function(indexArr, data) {
+				console.log(data); //返回选中的json数据
+			}
+		});
+		mobileSelect2.show()
+	</script>
+	</script>
+</html>

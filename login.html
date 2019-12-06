@@ -36,7 +36,7 @@
 			<img class="img-circle img_sy" src="img/WechatIMG13.jpeg">
 			<div class="input-group input-group-lg" style="margin-top: 30px;">
 				<span class="input-group-addon" id="basic-addon1">手机</span>
-				<input id="id_account" type="number" class="form-control" placeholder="请输入手机号码" aria-describedby="basic-addon1">
+				<input v-text="xinykj" id="id_account" type="text" class="form-control" placeholder="请输入手机号码" aria-describedby="basic-addon1">
 			</div>
 
 			<div class="input-group input-group-lg" style="margin-top: 10px;">
@@ -49,10 +49,10 @@
 
 	</body>
 	<script>
-		if(localStorage.getItem('access-token') != null){
-			access_token = localStorage.getItem('access-token');
-			location.href = "app_index.html";
-		}
+		// if(localStorage.getItem('access-token') != null){
+		// 	access_token = localStorage.getItem('access-token');
+		// 	location.href = "app_index.html";
+		// }
 		
 		$("#login_btn").click(function() {
 			ajax({
@@ -66,7 +66,7 @@
 					if(obj.success){
 						access_token = obj.data['access-token'];
 						localStorage.setItem('access-token',access_token)
-						location.href = "app_index.html";
+						location.href = "main.html";
 					}else{
 						alert(obj.message)
 					}

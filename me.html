@@ -45,7 +45,7 @@
 	<body style="background: #F7F7F7;">
 		<div id="id_app">
 			<div style="background: url(img/me_bg.png); background-size: 100% 100%;">
-				<img style="width: 24px;height: 24px;margin-left: 90%;margin-top: 20px;" src="img/icon_setting.png" />
+				<img @click="clickMenu('设置')" style="width: 24px;height: 24px;margin-left: 90%;margin-top: 20px;" src="img/icon_setting.png" />
 				<div style="color: #FFFFFF;">
 					<img class="img-circle" style="height: 70px;width: 70px;margin-left: 20px;" src="img/WechatIMG13.jpeg" />
 					<div style="display: inline-block;height: 70px;position: absolute;left: 100px;">
@@ -66,12 +66,32 @@
 			
 			<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 334px;border-radius: 8px;">
 				<div v-for="menu in menus" class="item">
-					<img :src="menu.img" class="menu_img" />
+					<img :src="menu.img" class="menu_img" @click="clickMenu(menu.name)"/>
 					<p class="item_key">{{menu.name}}</p>
 				</div>
 				<p style="height: 4px;"></p>
 			</div>
 				
+			</div>
+		<p style="height: 70px;"></p>
+			
+			<div style="position: fixed;bottom: 0px;z-index: 999;width: 100%;background: #FFFFFF;line-height: 20px;padding-top: 10px;">
+				<div onclick="location.href='main.html'" style="width: 24%;display: inline-block;text-align: center;">
+					<img style="width: 20px;" src="img/icon_tab_sy_1.png">
+					<p style="margin-top: 4px;font-size: 12px;">首页</p>
+				</div>
+				<div onclick="location.href='task.html'" style="width: 24%;display: inline-block;text-align: center;">
+					<img style="width: 20px;" src="img/icon_tab_rw_1.png">
+					<p style="margin-top: 4px;font-size: 12px;">任务</p>
+				</div>
+				<div onclick="location.href='updata_pay.html'" style="width: 24%;display: inline-block;text-align: center;">
+					<img style="width: 20px;" src="img/icon_tab_gm_1.png">
+					<p style="margin-top: 4px;font-size: 12px;">购买</p>
+				</div>
+				<div style="width: 24%;display: inline-block;text-align: center;">
+					<img style="width: 20px;" src="img/icon_tab_wd_2.png">
+					<p style="margin-top: 4px;font-size: 12px;color: #FF3159;">我的</p>
+				</div>
 			</div>
 			
 		</div>
@@ -84,20 +104,21 @@
 				vip_level:"年卡",
 				user_phone:"15111475403",
 				time:"2019/12/12 12:00:13",
+				team_count:0,
 				items: [
-					{key:'任务收益',value:'¥ 4.5'},
-					{key:'可用余额',value:'¥ 4500'},
-					{key:'任务佣金',value:'0 个'},
-					{key:'可做任务',value:'0 个'},
-					{key:'推荐奖励',value:'0 个'},
-					{key:'团队人数',value:'4 个'},
-					{key:'今日完成任务',value:'2 个'},
-					{key:'今日收益',value:'¥ 4.5'}
+					{key:'任务收益',value:'¥ 0'},
+					{key:'可用余额',value:'¥ 0'},
+					{key:'团队收益',value:'¥ 0'},
+					{key:'今日收益',value:'¥ 0'},
+					{key:'推荐奖励',value:'¥ 0'},
+					{key:'团队人数',value:'0 个'},
+					{key:'今日完成任务',value:'0 个'},
+					{key:'可做任务',value:'0 个'}
 				],
 				menus:[
 					{name:'升级记录',img:"img/menu_icon_level.png"},
 					{name:'我的团队',img:"img/menu_icon_team.png"},
-					{name:'发布任务',img:"img/menu_icon_rel_task.png"},
+					// {name:'发布任务',img:"img/menu_icon_rel_task.png"},
 					{name:'我的任务',img:"img/menu_icon_my_task.png"},
 					{name:'新闻公告',img:"img/menu_icon_news.png"},
 					{name:'提现账户',img:"img/menu_icon_account.png"},
@@ -107,8 +128,76 @@
 					{name:'修改密码',img:"img/menu_icon_xgmm.png"},
 				]
 			},
+			mounted(){
+				this.getUserInfo();
+			},
 			methods: {
-
+				clickMenu(str){
+					switch(str){
+						case "设置":
+							location.href = "my_info.html"
+						break;
+						case "升级记录":
+							location.href = "updata_history.html"
+						break;
+						case "我的团队":
+							location.href = "my_team.html"
+						break;
+						case "发布任务":
+							
+						break;
+						case "我的任务":
+							location.href = "task.html"
+						break;
+						case "新闻公告":
+							location.href = "message_list.html"
+						break;
+						case "提现账户":
+							location.href = "captial_account.html"
+						break;
+						case "提现记录":
+							location.href = "get_cash_list.html"
+						break;
+						case "资金明细":
+							location.href = "capital_info.html"
+						break;
+						case "推广赚钱":
+							
+						break;
+						case "修改密码":
+							location.href = "change_pwd.html"
+						break;
+					}
+				},
+				getUserInfo(){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: USER_INFO + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							if (obj.success) {
+								var data = obj.data;
+								that.userName = data.username;
+								that.items[0].value = '¥ ' + StringToFloat(data.integral_task);//任务收益
+								that.items[1].value = '¥ ' + StringToFloat(data.integral);//可用余额
+								that.items[2].value = '¥ ' + StringToFloat(data.integral_team);//团队收益
+								that.items[3].value = '¥ ' + StringToFloat(data.integral_same_day);//今日收益
+								that.items[7].value = data.level_max + ' 个';//可做任务
+								that.items[4].value = '¥ ' + StringToFloat(data.direct_share);//推荐奖励
+								that.items[5].value = data.team_count + ' 个';//团队人数
+								that.items[6].value = data.task_count_same_day + ' 个';//今日完成任务
+								
+								//有问题的字段
+								that.vip_level = data.level;//等级名
+								that.user_phone = '15111475403';//手机号码
+								that.time = '2019/12/15'//data.time;//到期时间
+								
+							}
+						}
+					})
+				}
+				
+			
 			}
 		});
 	</script>

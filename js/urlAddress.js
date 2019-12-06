@@ -19,3 +19,9 @@ var SUBMIT_TASK = host + "task/submit-task";
 var MY_TEAM = host + "member/my-team";
 
 var CHANGE_PWD = host + "member/update-password";
+
+var USER_INFO = host + "member/info";
+
+var BANK_LIST = host + "member/bank-list";
+
+var MY_BANK_INFO = host + "member/my-bank";

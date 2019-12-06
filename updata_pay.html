@@ -4,8 +4,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,
 		maximum-scale=1, user-scalable=no">
 		<meta charset="utf-8" />
-		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
-		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
@@ -20,15 +18,16 @@
 				margin: 0;
 				list-style: none
 			}
-			p,span{
+
+			p,
+			span {
 				font-weight: 100;
 			}
-			
 		</style>
 	</head>
-	<body>
+	<body style="background: #F7F7F7;">
 		<div id="id_app">
-			
+
 			<ul id="id_list" style="margin: 2%;">
 				<li style="color: #FFFFFF;margin: 1%;overflow: hidden;" v-for="(data,index) in datas ">
 					<!-- <img src="img/季度卡.png" style="width: 100%;"/> -->
@@ -43,69 +42,87 @@
 				</li>
 			</ul>
 		</div>
+		<p style="height: 70px;"></p>
 
-
+		<div style="position: fixed;bottom: 0px; z-index: 999;width: 100%;background: #FFFFFF;line-height: 20px;padding-top: 10px;">
+			<div onclick="location.href='main.html'" style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_sy_1.png">
+				<p style="margin-top: 4px;font-size: 12px;">首页</p>
+			</div>
+			<div onclick="location.href='task.html'" style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_rw_1.png">
+				<p style="margin-top: 4px;font-size: 12px;">任务</p>
+			</div>
+			<div style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_gm_2.png">
+				<p style="margin-top: 4px;font-size: 12px;color: #FF3159;">购买</p>
+			</div>
+			<div onclick="location.href='me.html'" style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_wd_1.png">
+				<p style="margin-top: 4px;font-size: 12px;">我的</p>
+			</div>
+		</div>
 
 	</body>
 	<script>
-		function updata_pay(ID,add_time,description,name,price,sort,status,task_count,type,img){
-			var data = new Object();
-			data.ID = ID;
-			data.add_time = add_time;
-			data.description = description;
-			data.name = name;
-			data.price = price;
-			data.sort = sort;
-			data.status = status;
-			data.task_count = task_count;
-			data.type = type;
-			data.img = img;
-			return data;
-		}
-		
-		var datas = new Array();
-		var imgArrays = ["level_1","level_2","level_3"];
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				datas: datas,
+				datas: [],
+				imgArrays : ["level_1", "level_2", "level_3"]
 			},
-			methods:{
-				pay:function(levelName,levelPrice){
+			mounted(){
+				this.getData();
+			},
+			methods: {
+				pay: function(levelName, levelPrice) {
 					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + levelPrice);
+				},
+				Packge:function(ID, add_time, description, name, price, sort, status, task_count, type, img){
+					var data = new Object();
+					data.ID = ID;
+					data.add_time = add_time;
+					data.description = description;
+					data.name = name;
+					data.price = price;
+					data.sort = sort;
+					data.status = status;
+					data.task_count = task_count;
+					data.type = type;
+					data.img = img;
+					return data;
+				},
+				getData:function(){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							if (obj.success) {
+								for (var i = 0; i < obj.data.list.length; i++) {
+									var packge = obj.data.list[i];
+									that.datas.push(that.Packge(
+										packge.ID,
+										packge.add_time,
+										packge.description,
+										packge.name,
+										StringToFloat(packge.price),
+										packge.sort,
+										packge.status,
+										packge.task_count,
+										packge.type,
+										that.imgArrays[i % 3]
+									));
+								}
+							} else {
+								alert(obj.message)
+							}
+						}
+					})
 				}
 			}
 		});
 
-		ajax({
-			method: 'POST',
-			url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
-			success: function(obj) {
-				if (obj.success) {
-					console.log(obj)
-					for (var i = 0; i < obj.data.list.length; i++) {
-						var taskJson = obj.data.list[i];
-						datas.push(new updata_pay(
-							taskJson.ID,
-							taskJson.add_time,
-							taskJson.description,
-							taskJson.name,
-							taskJson.price,
-							taskJson.sort,
-							taskJson.status,
-							taskJson.task_count,
-							taskJson.type,
-							imgArrays[i % 3]
-						));
-					}
-					console.log(datas)
-				} else {
-					alert(obj.message)
-				}
-			}
-		})
-		
-		
 		
 	</script>
 </html>

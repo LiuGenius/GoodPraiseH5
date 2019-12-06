@@ -3,12 +3,10 @@
 	<head>
 		<meta name='viewport' content='width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no'>
 		<meta charset='utf-8' />
-		<script src='http://libs.baidu.com/jquery/2.1.4/jquery.min.js'></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/task.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	</head>
@@ -46,7 +44,8 @@
 			padding: 5px 10px 5px 10px;
 			border-radius: 4px;
 		}
-		.item_bg{
+
+		.item_bg {
 			background: #FFFFFF;
 			margin: 2%;
 			border-radius: 4px;
@@ -67,10 +66,10 @@
 			</div>
 			<!-- 待完成 -->
 			<ul v-if="showStatus">
-				<li v-for="data in taskDatas">
+				<li v-for="data in taskDatas" >
 					<div class="item_bg">
-						<img :src="data.img" style="margin-left: 12px;width: 60px;margin-bottom: 30px;" />
-						<ul style="margin-top: 0px;display: inline-block;margin-left: 15px;">
+						<img :src="data.img" style="margin-left: 12px;width: 70px;margin-bottom: 30px;" />
+						<ul style="margin-top: 0px;display: inline-block;margin-left: 30px;">
 							<li style="height: 30px;padding-top: 15px;"><span>任务要求: {{data.task_name}}</span><span style="font-weight: bold;color: #FF3159;float: right;">¥
 									{{data.integral}}</span></li>
 							<li style="height: 30px;padding-top: 10px;"><span>发布时间: {{data.add_time}}</span></li>
@@ -95,7 +94,26 @@
 				</li>
 			</ul>
 		</div>
-
+		<p style="height: 70px;"></p>
+		
+		<div style="position: fixed;bottom: 0px;z-index: 999;width: 100%;background: #FFFFFF;line-height: 20px;padding-top: 10px;">
+			<div onclick="location.href='main.html'" style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_sy_1.png">
+				<p style="margin-top: 4px;font-size: 12px;">首页</p>
+			</div>
+			<div style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_rw_2.png">
+				<p style="margin-top: 4px;font-size: 12px;color: #FF3159;">任务</p>
+			</div>
+			<div onclick="location.href='updata_pay.html'" style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_gm_1.png">
+				<p style="margin-top: 4px;font-size: 12px;">购买</p>
+			</div>
+			<div onclick="location.href='me.html'" style="width: 24%;display: inline-block;text-align: center;">
+				<img style="width: 20px;" src="img/icon_tab_wd_1.png">
+				<p style="margin-top: 4px;font-size: 12px;padding-bottom: 10px;">我的</p>
+			</div>
+		</div>
 
 	</body>
 
@@ -108,12 +126,12 @@
 				showStatus: true,
 				taskDatas: taskDatas,
 			},
-			mounted(){
+			mounted() {
 				this.getData(0);
 			},
 			methods: {
 				clickTab: function(tag) {
-					taskDatas.splice(0,taskDatas.length)
+					taskDatas.splice(0, taskDatas.length)
 					this.showStatus = (tag == 0);
 					this.getData(tag);
 				},
@@ -131,7 +149,7 @@
 					window.alert('复制成功')
 				},
 				submitTask: function(v1, v2, v3) {
-					location.href = "submit_task.html?id=" + v1 + "&taskName=" + v2 + "&taskMoney=" + v3;
+					location.href = "submit_task.html?id=" + v1 + "&taskName=" + decodeURI(v2) + "&taskMoney=" + v3;
 				},
 				Task: function(ID, add_time, img, link, name, task_name, weixin, integral) {
 					var task = new Object();
@@ -142,11 +160,11 @@
 					task.name = name;
 					task.task_name = task_name;
 					task.weixin = weixin;
-					task.integral = integral;
-				
+					task.integral = StringToFloat(integral);
+
 					return task;
 				},
-				getData(status){
+				getData(status) {
 					var that = this;
 					ajax({
 						method: 'POST',
@@ -156,11 +174,11 @@
 						},
 						success: function(obj) {
 							if (obj.success) {
-								
+
 								for (var i = 0; i < obj.data.length; i++) {
 									var taskJson = obj.data[i];
 									taskDatas.push(that.Task(
-										taskJson.Id,
+										taskJson.ID,
 										taskJson.add_time,
 										taskJson.img,
 										taskJson.link,

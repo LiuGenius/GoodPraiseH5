@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title>提现账户</title>
+		<style>
+			ul,
+			li {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			p,
+			span,input{
+				font-size: 15px;
+				font-weight: 200;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			body {
+				background: #F7F7F7;
+			}
+			.border_input{
+				outline: none;
+				width: 96%;
+				margin-left: 2%;
+				border-radius: 4px;
+				border: #E2E2E2 solid 1px;
+				height: 40px;
+				padding-left: 12px;
+				background: #FFFFFF;
+				margin-top: 12px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">提现账户</span>
+			</div>
+			
+			<select v-model="bank_id" class="border_input">
+				<option :value="bank.ID" style="height: 40px;background: #FFFFFF;" v-for="bank in bank_list">{{bank.name}}</option>
+			</select>
+			
+			<input v-model="branch_name" type="text" placeholder="请输入支行名称" class="border_input"/>
+			
+			<input v-model="name" type="text" placeholder="请输入真实姓名" class="border_input"/>
+			
+			<input v-model="bank_card" type="number" placeholder="请输入银行卡号" class="border_input"/>
+		
+			<p @click="submit()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;margin-top: 40px;border-radius: 4px;">确认</p>
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el:"#id_app",
+			data:{
+				bank_list:[],
+				bank_id:1,
+				branch_name:"",
+				name:"",
+				bank_card:"",
+			},
+			mounted(){
+				this.getUserSetting();
+				this.getBankInfo();
+			},
+			methods:{
+				Bank(ID,name){
+					var bank = new Object();
+					bank.ID = ID;
+					bank.name = name;
+					return bank;
+				},
+				getBankInfo(){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: BANK_LIST + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							if (obj.success) {
+								for (var i = 0; i < obj.data.length; i++) {
+									var bank = obj.data[i];
+									that.bank_list.push(that.Bank(
+										bank.ID,bank.name
+									));
+								}
+							} else {
+								alert(obj.message)
+							}
+						}
+					})
+				},
+				submit(){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: MY_BANK_INFO + "?access-token=" + localStorage.getItem('access-token'),
+						data:{
+							branch_name:that.branch_name,
+							name:that.name,
+							bank_card:that.bank_card,
+							bank_id:that.bank_id
+						},
+						success: function(obj) {
+							alert(obj.message)
+						}
+					})
+				},
+				getUserSetting(){
+					var that = this;
+					ajax({
+						method: 'GET',
+						url: MY_BANK_INFO,
+						data:{
+							"access-token":localStorage.getItem('access-token')
+						},
+						success: function(obj) {
+							if (obj.success) {
+								if(obj.data == null){
+									return;
+								}
+								that.branch_name = obj.data.branch_name;
+								that.name = obj.data.name;
+								that.bank_card = obj.data.bank_card;
+								that.bank_id = obj.data.bank_id;
+							} else {
+								alert(obj.message)
+							}
+						}
+					})
+				}
+			}
+		});
+	</script>
+</html>

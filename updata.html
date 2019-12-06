@@ -8,7 +8,6 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/updata_pay.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 		<style>
@@ -26,9 +25,9 @@
 	<body>
 		<div id="id_app">
 			<div style="background: #FFFFFF;">
-				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;">立即升级</span>
-				<span style="position: absolute;right: 20px;line-height: 50px;">升级记录</span>
+				<span onclick="location.href='updata_history.html'" style="position: absolute;right: 20px;line-height: 50px;">升级记录</span>
 				<img style="width: 60%;margin-left: 20%;" src="img/WechatIMG13.jpeg" />
 			</div>
 
@@ -48,13 +47,11 @@
 		</div>
 	</body>
 	<script>
-		var levelName = GetQueryString('levelName');
-		var levelPrice = GetQueryString('levelPrice');;
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				levelName:levelName,
-				levelPrice:levelPrice,
+				levelName:GetQueryString('levelName'),
+				levelPrice:GetQueryString('levelPrice'),
 				alipayAccount:''
 			},
 			methods: {

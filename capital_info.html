@@ -33,33 +33,47 @@
 		</style>
 	</head>
 	<body>
+		
 		<div id="id_app">
 			<div style="background: #FFFFFF;">
-				<img style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
-				<span style="margin-top: 4px;margin-left: -10px;">提现记录</span>
+				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">资金明细</span>
 			</div>
-			<ul style="margin-top: 3%;">
-				<li v-for="data in datas" style="background: #FFFFFF;height: 50px;line-height: 50px;padding-left: 12px;padding-right: 12px;border-bottom: #E5E5E5 solid 1px;">
+			<div style="width: 100%;background: url(img/bg_capital.png);background-size: 100% 100%;">
+				<p style="text-align: center;color: #FFFFFF;font-weight: 400;font-size: 20px;padding-top: 50px;">¥ {{total_money}}</p>
+				<p style="text-align: center;color: #FFFFFF;font-size: 12px;padding-bottom: 50px;">共计收益</p>
+			</div>
+			<ul>
+				<li v-for="data in datas" style="background: #FFFFFF;line-height: 30px;padding-left: 12px;padding-right: 12px;border-bottom: #E5E5E5 solid 1px;">
 					<div>
-						<span>提现: ¥{{data.money}}</span>
-						<span style="float: right;">审核{{data.result}}</span>
+						<span>{{data.remake}}</span>
+						<span style="float: right;color: red;">¥ {{data.money}}</span>
+						
 					</div>
+					<p>{{data.time}}</p>
 				</li>
 			</ul>
 		</div>
 	</body>
 	<script>
-		var datas = new Array();
 		var app = new Vue({
 			el:"#id_app",
 			data:{
 				// datas:datas,
 				datas:[
-					{money:'0.5',result:'通过'},
-					{money:'0.5',result:'通过'},
-					{money:'1.0',result:'通过'},
-					{money:'1.0',result:'通过'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
+					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
 				],
+				total_money:4.5
 			},
 			mounted(){
 				// this.getData();
