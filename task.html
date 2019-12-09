@@ -118,20 +118,19 @@
 	</body>
 
 	<script>
-		var taskDatas = new Array();
 
 		var app = new Vue({
 			el: "#id_app",
 			data: {
 				showStatus: true,
-				taskDatas: taskDatas,
+				taskDatas: [],
 			},
 			mounted() {
 				this.getData(0);
 			},
 			methods: {
 				clickTab: function(tag) {
-					taskDatas.splice(0, taskDatas.length)
+					this.taskDatas.splice(0, this.taskDatas.length)
 					this.showStatus = (tag == 0);
 					this.getData(tag);
 				},
@@ -174,10 +173,9 @@
 						},
 						success: function(obj) {
 							if (obj.success) {
-
 								for (var i = 0; i < obj.data.length; i++) {
 									var taskJson = obj.data[i];
-									taskDatas.push(that.Task(
+									that.taskDatas.push(that.Task(
 										taskJson.ID,
 										taskJson.add_time,
 										taskJson.img,

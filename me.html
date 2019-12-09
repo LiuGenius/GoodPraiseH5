@@ -126,6 +126,7 @@
 					{name:'资金明细',img:"img/menu_icon_zjmx.png"},
 					{name:'推广赚钱',img:"img/menu_icon_tgzq.png"},
 					{name:'修改密码',img:"img/menu_icon_xgmm.png"},
+					{name:'申请提现',img:"img/icon_menu_sqtx.png"},
 				]
 			},
 			mounted(){
@@ -167,6 +168,9 @@
 						case "修改密码":
 							location.href = "change_pwd.html"
 						break;
+						case "申请提现":
+							location.href = "captial.html"
+						break;
 					}
 				},
 				getUserInfo(){
@@ -178,6 +182,7 @@
 							if (obj.success) {
 								var data = obj.data;
 								that.userName = data.username;
+								that.vip_level = data.level;//等级名
 								that.items[0].value = '¥ ' + StringToFloat(data.integral_task);//任务收益
 								that.items[1].value = '¥ ' + StringToFloat(data.integral);//可用余额
 								that.items[2].value = '¥ ' + StringToFloat(data.integral_team);//团队收益
@@ -188,7 +193,6 @@
 								that.items[6].value = data.task_count_same_day + ' 个';//今日完成任务
 								
 								//有问题的字段
-								that.vip_level = data.level;//等级名
 								that.user_phone = '15111475403';//手机号码
 								that.time = '2019/12/15'//data.time;//到期时间
 								

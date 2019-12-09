@@ -52,3 +52,7 @@ function GetQueryString(name) {
 function StringToFloat(str){
 	return parseFloat(str).toFixed(2)
 }
+
+function getLocalTime(nS) {  
+ return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');  
+}

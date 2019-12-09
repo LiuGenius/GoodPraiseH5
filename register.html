@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title>注册用户</title>
+		<style>
+			ul,
+			li {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			
+			p,
+			span,
+			input {
+				font-size: 15px;
+				font-weight: 200;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			body {
+				background: #F7F7F7;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;">注册</span>
+			</div>
+			<input v-model="user_phone" type="number" placeholder="请输入手机号码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;" />
+
+			<div style="height: 40px;margin-top: 10px;margin-left: 3%;width: 94%;background: #FFFFFF;line-height: 40px;">
+				<input v-model="check_code" type="number" placeholder="验证码" style="padding-left: 10px;outline: none;" />
+				<span @click="getCode()" style="float: right;margin-right: 12px;font-size: 12px;background: #1E83D3;height: 30px;margin-top: 5px;line-height: 30px;color: #FFFFFF;font-weight: 100;padding-left: 12px;padding-right: 12px;border-radius: 4px;">{{codeBtnText}}</span>
+			</div>
+
+			<input v-model="user_name" type="text" placeholder="请输入姓名" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;" />
+
+			<input v-model="user_pwd1" type="password" placeholder="请输入登录密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;" />
+
+			<input v-model="user_pwd2" type="password" placeholder="请再次输入密码" style="width: 94%;height: 40px;margin-top: 10px;margin-left: 3%;padding-left: 10px;outline: none;" />
+
+			<p style="font-size: 10px;margin-left: 3%;margin-top: 40px;color: #FF3159;">*密码需由英文+字母+数字组成,最少6位</p>
+			<p @click="register()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;border-radius: 4px;margin-top: 10px;">注册</p>
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			el: "#id_app",
+			data: {
+				user_phone: '',
+				check_code: '',
+				user_name: '',
+				user_pwd1: '',
+				user_pwd2: '',
+				codeBtnText:'发送验证码',
+				timeOut:10,
+				isCanGetCode:true
+			},
+			methods: {
+				/**
+				 * 注册用户
+				 */
+				register: function() {
+					var that = this;
+					ajax({
+						method: "POST",
+						url: REGISTER_USER + "?access-token=" + localStorage.getItem("access-token"),
+						data: {
+							userphone: that.user_phone,//用户手机号/账号
+							username: that.username,//用户名字
+							password: that.user_pwd1,//用户密码
+							checkcode: that.check_code,//验证码
+						},
+						success: function(obj) {
+							alert(obj.message);
+						}
+					});
+				},
+				/**
+				 * 获取验证码
+				 */
+				getVerificationCode: function() {
+					var that = this;
+					if(that.isCanGetCode){
+						that.isCanGetCode = false;
+						
+						ajax({
+							method: "POST",
+							url: GET_VERIFICATION_CODE + "?access-token=" + localStorage.getItem("access-token"),
+							data: {
+								userphone: that.user_phone,//用户手机号/账号
+							},
+							success: function(obj) {
+								var interval = setInterval(function() {
+									that.codeBtnText = (--that.timeOut) + 's可重发';
+									if(that.timeOut == 0){
+										clearInterval(interval);
+										that.isCanGetCode = true;
+										that.timeOut = 10;
+										that.codeBtnText = '重新获取';
+									}
+								}, 1000);
+							}
+						});
+						
+					}
+				}
+			},
+			mounted() {
+
+			},
+
+		})
+	</script>
+</html>

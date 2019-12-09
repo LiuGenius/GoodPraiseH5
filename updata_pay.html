@@ -37,7 +37,7 @@
 						<p style="margin-left: 20px;margin-top: 20px;">每天可做任务: {{data.task_count}}个</p>
 						<p style="margin-left: 20px;margin-top: -4px;">{{data.description}}</p>
 						<p style="margin-left: 20px;margin-top: -4px;">直接邀请同伴奖励: 20 %</p>
-						<p @click="pay(data.name,data.price)" style="width: 100%;text-align: center;height: 40px;line-height: 40px;">立即升级</p>
+						<p @click="pay(data.name,data.price)" style="width: 100%;text-align: center;height: 40px;line-height: 40px;">立即升级(剩余:{{data.surplus}})</p>
 					</div>
 				</li>
 			</ul>
@@ -78,7 +78,7 @@
 				pay: function(levelName, levelPrice) {
 					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + levelPrice);
 				},
-				Packge:function(ID, add_time, description, name, price, sort, status, task_count, type, img){
+				Packge:function(ID, add_time, description, name, price, sort, status, task_count, type, img,surplus){
 					var data = new Object();
 					data.ID = ID;
 					data.add_time = add_time;
@@ -90,28 +90,32 @@
 					data.task_count = task_count;
 					data.type = type;
 					data.img = img;
+					data.surplus = surplus;
 					return data;
 				},
 				getData:function(){
 					var that = this;
+				
 					ajax({
 						method: 'POST',
 						url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
 						success: function(obj) {
 							if (obj.success) {
-								for (var i = 0; i < obj.data.list.length; i++) {
-									var packge = obj.data.list[i];
+								for (var i = 0; i < obj.data.length; i++) {
+									var packge = obj.data[i];
 									that.datas.push(that.Packge(
 										packge.ID,
 										packge.add_time,
-										packge.description,
+										//packge.description,
+										'这里是描述',
 										packge.name,
 										StringToFloat(packge.price),
 										packge.sort,
 										packge.status,
-										packge.task_count,
+										packge.max,
 										packge.type,
-										that.imgArrays[i % 3]
+										that.imgArrays[i % 3],
+										i * 123
 									));
 								}
 							} else {

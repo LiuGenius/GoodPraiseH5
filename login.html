@@ -4,75 +4,70 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, 
 		maximum-scale=1, user-scalable=no">
 		<meta charset="utf-8" />
-		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-		<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 		<title>登录</title>
 		<style>
-			.div_body{
-				margin-top: 40px;
-			}
 			.img_sy{
-				width: 40%;
-				margin-left: 30%;
+				width: 30%;
+				margin-left: 35%;
 				text-align: center;
-			}
-			.login_btn{
-				margin-top: 30px;
-				height: 40px;
-				background: #2AABD2;
-				color: #FFFFFF;
-				border: none;
-				border-radius: 4px;
-				outline: none;
+				margin-top: 80px;
 			}
 		</style>
 	</head>
-	<body>
-		<div class="container-fluid div_body">
+	<body style="background: #F7F7F7;">
+		<div id="id_app">
 			<img class="img-circle img_sy" src="img/WechatIMG13.jpeg">
-			<div class="input-group input-group-lg" style="margin-top: 30px;">
-				<span class="input-group-addon" id="basic-addon1">手机</span>
-				<input v-text="xinykj" id="id_account" type="text" class="form-control" placeholder="请输入手机号码" aria-describedby="basic-addon1">
-			</div>
+			<input v-model="user_account" type="text" placeholder="请输入登录账号" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;"/>
+			
+			<input v-model="user_pwd" type="password" placeholder="请输入登录密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;"/>
 
-			<div class="input-group input-group-lg" style="margin-top: 10px;">
-				<span class="input-group-addon" id="basic-addon1">密码</span>
-				<input id="id_password" type="password" class="form-control" placeholder="请输入登录密码" aria-describedby="basic-addon1">
-			</div>
-
-			<button id="login_btn" type="button" class="btn-block login_btn">立 即 登 录</button>
+			<p style="margin-left: 12px;margin-top: 40px;" onclick="location.href='register.html'">注册</p>
+			<p @click="login()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;border-radius: 4px;margin-top: 8px;">登录</p>
+			
 		</div>
 
 	</body>
 	<script>
-		// if(localStorage.getItem('access-token') != null){
-		// 	access_token = localStorage.getItem('access-token');
-		// 	location.href = "app_index.html";
-		// }
 		
-		$("#login_btn").click(function() {
-			ajax({
-				method: 'POST',
-				url: LOGIN,
-				data:{
-					username:'xinykj',//$("#id_account").val()
-					password:$("#id_password").val()
-				},
-				success: function(obj) {
-					if(obj.success){
-						access_token = obj.data['access-token'];
-						localStorage.setItem('access-token',access_token)
-						location.href = "main.html";
-					}else{
-						alert(obj.message)
-					}
+		var app = new Vue({
+			el:"#id_app",
+			data:{
+				user_account:'',
+				user_pwd:''
+			},
+			mounted(){
+				// if(localStorage.getItem('access-token') != null){
+				// 	var access_token = localStorage.getItem('access-token');
+				// 	location.href = "main.html";
+				// }
+			},
+			methods:{
+				login:function(){
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: LOGIN,
+						data:{
+							username:that.user_account,
+							password:that.user_pwd
+						},
+						success: function(obj) {
+							if(obj.success){
+								var access_token = obj.data['access-token'];
+								localStorage.setItem('access-token',access_token)
+								location.href = "main.html";
+							}else{
+								alert(obj.message)
+							}
+						}
+					})
 				}
-			})
-			// location.href = "main.html";
-		});
+			}
+		})
 	</script>
 </html>

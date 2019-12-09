@@ -6,7 +6,6 @@
 		<meta charset="utf-8" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-		<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
@@ -58,6 +57,7 @@
 			span {
 				font-weight: 150;
 			}
+			
 		</style>
 	</head>
 	<body style="background: #f0f0f0;">
@@ -65,14 +65,13 @@
 
 
 			<div>
-				<!-- <ul >
-				<li v-for="(banner,index) in bannerList">
-					<a :href="banner.url"><img :src="banner.img" alt=''></a>
-				</li>
-				<ol>
-					<li @click="clickBannar(index)">{{index + 1}}</li>"
-				</ol>
-			</ul> -->
+				<ul style="height: 180px;">
+					<li v-if="index == cIndex" v-for="(banner,index) in bannerList">
+						<a :href="banner.url">
+							<img style="display: inline-block;height: 180px;width: 100%;" :src="banner.img" alt=''>
+						</a>
+					</li>
+				</ul>
 
 			</div>
 
@@ -80,7 +79,7 @@
 
 			<div style="background: #FFFFFF;padding-top: 20px;padding-bottom: 10px;" id="menu">
 				<div style="width: 25%;">
-					<img style="width: 40%;margin-left: 30%;" src="img/WechatIMG15.png">
+					<img onclick="location.href='message_list.html'" style="width: 40%;margin-left: 30%;" src="img/WechatIMG15.png">
 					<p style="width: 100%;text-align: center;font-size: 12px;margin-top: 4px;">新闻公告</p>
 				</div>
 			</div>
@@ -88,7 +87,7 @@
 			<div class="wrap">
 				<div class="cont">
 					<ul class="state">
-						<li v-for="(title,index) in titles">
+						<li v-for="(title,index) in titleList">
 							<img :src="title.logo" style="width: 16px;height: 16px;">
 							<span @click="clickTab(title.ID)" style="font-size: 12px;padding-left: 8px;">{{title.name}}</span>
 						</li>
@@ -140,22 +139,30 @@
 
 	</body>
 	<script>
-		var bannerList = new Array();
-		var titleList = new Array();
-		var datas = new Array();
-
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				titles: titleList,
-				datas: datas,
-				bannerList: bannerList
+				titleList: [],
+				datas: [],
+				bannerList: [],
+				cIndex:0
+			},
+			mounted() {
+				this.getData();
+				var that = this;
+				setInterval(function(){
+					++that.cIndex;
+					if(that.cIndex == that.bannerList.length){
+						that.cIndex = 0;
+					}
+				},5000)
 			},
 			methods: {
 				/**
 				 * @param {Object} ID切换tab
 				 */
 				clickTab: function(ID) {
+					var that = this;
 					ajax({
 						method: 'POST',
 						dataType: "json",
@@ -166,10 +173,10 @@
 						},
 						success: function(obj) {
 							if (obj.success) {
-								datas.splice(0, datas.length);
+								that.datas.splice(0, that.datas.length);
 								for (var i = 0; i < obj.data.length; i++) {
 									var dataitem = obj.data[i];
-									datas.push(new dataItem(
+									that.datas.push(that.DataItem(
 										dataitem.ID,
 										dataitem.add_time,
 										dataitem.img,
@@ -205,39 +212,66 @@
 						}
 
 					});
+				},
+				getData: function() {
+					var that = this;
+					ajax({
+						method: 'POST',
+						dataType: "json",
+						url: TASK_HOME + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							if (obj.success) {
+								//初始化轮播图
+								for (var i = 0; i < obj.data.banner.length; i++) {
+									that.bannerList.push(that.banner(obj.data.banner[i].image, obj.data.banner[i].link))
+								}
+								//获取title数据
+								for (var i = 0; i < obj.data.platform.length; i++) {
+									var title = obj.data.platform[i];
+									that.titleList.push(that.Title(
+										title.ID,
+										title.name,
+										title.logo,
+										title.logo_2,
+										title.status,
+										title.sort
+									))
+								};
+								that.clickTab(that.titleList[0].ID)
+							}
+						}
+					})
+				},
+				Title: function(ID, name, logo, logo_2, status, sort) {
+					var title = new Object();
+					title.ID = ID;
+					title.name = name;
+					title.logo = logo;
+					title.logo_2 = logo_2;
+					title.status = status;
+					title.sort = sort;
+					return title;
+				},
+				banner: function(img, url) {
+					var banner = new Object();
+					banner.img = img;
+					banner.url = url;
+					return banner;
+				},
+				DataItem: function(ID, add_time, img, count, link, name, task_name, money) {
+					var data = new Object();
+					data.ID = ID;
+					data.add_time = add_time;
+					data.img = img;
+					data.count = count;
+					data.link = link;
+					data.name = name;
+					data.task_name = task_name;
+					data.money = money;
+					return data;
 				}
 
 			}
 		});
-
-
-
-		ajax({
-			method: 'POST',
-			dataType: "json",
-			url: TASK_HOME + "?access-token=" + localStorage.getItem('access-token'),
-			success: function(obj) {
-				if (obj.success) {
-					//初始化轮播图
-					for (var i = 0; i < obj.data.banner.length; i++) {
-						bannerList.push(new banner(obj.data.banner[i].image, obj.data.banner[i].link))
-					}
-					//获取title数据
-					for (var i = 0; i < obj.data.platform.length; i++) {
-						var title = obj.data.platform[i];
-						titleList.push(new Title(
-							title.ID,
-							title.name,
-							title.logo,
-							title.logo_2,
-							title.status,
-							title.sort
-						))
-					};
-				} else {
-					alert(obj.message)
-				}
-			}
-		})
 	</script>
 </html>
