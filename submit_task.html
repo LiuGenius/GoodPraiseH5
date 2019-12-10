@@ -4,6 +4,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,
 		maximum-scale=1, user-scalable=no">
 		<meta charset="utf-8" />
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
@@ -17,6 +18,7 @@
 			input {
 				font-weight: 100;
 			}
+
 			body {
 				background: #F7F7F7;
 			}
@@ -35,17 +37,22 @@
 
 			<img id="id_img" @click="chooseFile()" style="width: 86%;margin-left: 7%;" src="img/icon_add_img.png" />
 			<p @click="submit()" style="width: 70%;margin-left: 15%;text-align: center;height: 40px;line-height: 40px;background: #4287FF;color: #FFFFFF;margin-top: 20px;border-radius: 4px;">提交</p>
-			<input onchange="showPicture(this)" style="display: none;" accept="image/*" v-model="filePath" id="id_file" type="file" />
+			<form enctype="multipart/form-data" id="uploadForm">
+				<input onchange="showPicture(this)" style="display: none;" accept="image/*"  id="id_file" type="file" />
+			</form>
 		</div>
+
+
+
 	</body>
 	<script>
+		var fileUrl = '';
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				filePath: '',
 				taskName: GetQueryString("taskName"),
 				taskMoney: GetQueryString("taskMoney"),
-				ID:GetQueryString("id"),
+				ID: GetQueryString("id"),
 			},
 			methods: {
 				submit: function() {
@@ -53,12 +60,13 @@
 						method: 'POST',
 						url: SUBMIT_TASK + "?access-token=" + localStorage.getItem('access-token'),
 						data: {
-							img: this.filePath,
-							id:this.ID
+							img: fileUrl,
+							id: this.ID
 						},
 						success: function(obj) {
 							if (obj.success) {
-								
+								alert(obj.message)
+								history.back();
 							} else {
 								alert(obj.message)
 							}
@@ -73,6 +81,27 @@
 
 		function showPicture(imgFile) {
 			document.getElementById("id_img").src = window.URL.createObjectURL(imgFile.files[0]);
+			var formData = new FormData();
+			formData.append('img', imgFile.files[0]);
+			//ajax请求
+			$.ajax({
+				type: "post",
+				url: UPDATA_IMAGE + "?access-token=" + localStorage.getItem('access-token'),
+				data: formData,
+				dataType: 'json',
+				processData: false, // 告诉jQuery不要去处理发送的数据
+				contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+				xhrFields: {
+					withCredentials: true
+				},
+				async: true, //默认是true：异步，false：同步。
+				success: function(data) {
+					fileUrl = data.data.url;
+				},
+				error: function(data) {
+					console.log('请求异常');
+				},
+			});
 		}
 	</script>
 </html>

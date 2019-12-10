@@ -44,7 +44,7 @@
 
 			<div style="height: 40px;margin-top: 10px;margin-left: 3%;width: 94%;background: #FFFFFF;line-height: 40px;">
 				<input v-model="check_code" type="number" placeholder="验证码" style="padding-left: 10px;outline: none;" />
-				<span @click="getCode()" style="float: right;margin-right: 12px;font-size: 12px;background: #1E83D3;height: 30px;margin-top: 5px;line-height: 30px;color: #FFFFFF;font-weight: 100;padding-left: 12px;padding-right: 12px;border-radius: 4px;">{{codeBtnText}}</span>
+				<span @click="getVerificationCode()" style="float: right;margin-right: 12px;font-size: 12px;background: #1E83D3;height: 30px;margin-top: 5px;line-height: 30px;color: #FFFFFF;font-weight: 100;padding-left: 12px;padding-right: 12px;border-radius: 4px;">{{codeBtnText}}</span>
 			</div>
 
 			<input v-model="user_name" type="text" placeholder="请输入姓名" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;" />
@@ -67,7 +67,7 @@
 				user_pwd1: '',
 				user_pwd2: '',
 				codeBtnText:'发送验证码',
-				timeOut:10,
+				timeOut:60,
 				isCanGetCode:true
 			},
 			methods: {
@@ -78,12 +78,13 @@
 					var that = this;
 					ajax({
 						method: "POST",
-						url: REGISTER_USER + "?access-token=" + localStorage.getItem("access-token"),
+						url: REGISTER_USER,
 						data: {
-							userphone: that.user_phone,//用户手机号/账号
-							username: that.username,//用户名字
+							phone: that.user_phone,//用户手机号/账号
+							username: that.user_name,//用户名字
 							password: that.user_pwd1,//用户密码
-							checkcode: that.check_code,//验证码
+							check_code: that.check_code,//验证码
+							code:'57',//邀请码
 						},
 						success: function(obj) {
 							alert(obj.message);
@@ -97,23 +98,27 @@
 					var that = this;
 					if(that.isCanGetCode){
 						that.isCanGetCode = false;
-						
 						ajax({
 							method: "POST",
-							url: GET_VERIFICATION_CODE + "?access-token=" + localStorage.getItem("access-token"),
+							url: GET_VERIFICATION_CODE,
 							data: {
-								userphone: that.user_phone,//用户手机号/账号
+								phone: that.user_phone,//用户手机号/账号
 							},
 							success: function(obj) {
-								var interval = setInterval(function() {
-									that.codeBtnText = (--that.timeOut) + 's可重发';
-									if(that.timeOut == 0){
-										clearInterval(interval);
-										that.isCanGetCode = true;
-										that.timeOut = 10;
-										that.codeBtnText = '重新获取';
-									}
-								}, 1000);
+								if(obj.success){
+									var interval = setInterval(function() {
+										that.codeBtnText = (--that.timeOut) + 's可重发';
+										if(that.timeOut == 0){
+											clearInterval(interval);
+											that.isCanGetCode = true;
+											that.timeOut = 60;
+											that.codeBtnText = '重新获取';
+										}
+									}, 1000);
+								}else{
+									alert('验证码获取失败');
+								}
+								
 							}
 						});
 						

@@ -6,7 +6,7 @@ var LOGIN = host + "member/login";
 //用户注册
 var REGISTER_USER = host + "member/register";
 //获取验证码
-var GET_VERIFICATION_CODE = host + "";
+var GET_VERIFICATION_CODE = host + "member/phone-code";
 //首页数据
 var TASK_HOME = host + "home/task-home";
 //任务列表
@@ -15,7 +15,7 @@ var TASK_LIST = host + "home/task-list";
 var RECEIVE_TASK = host + "task/receive-task";
 //我的任务列表
 var MY_TASK_LIST = host + "task/my-task-list";
-//等级å列表
+//等级列表
 var PACKAGE_LIST = host + "level/level-list";
 //提交任务
 var SUBMIT_TASK = host + "task/submit-task";
@@ -33,3 +33,5 @@ var MY_BANK_INFO = host + "member/my-bank";
 var NEWS_LIST = host + "home/news-list";
 //新闻详情
 var NEWS_INFO = host + "home/news-info";
+//上传图片
+var UPDATA_IMAGE = host + "image/upload";

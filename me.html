@@ -134,6 +134,7 @@
 			},
 			methods: {
 				clickMenu(str){
+					var that = this;
 					switch(str){
 						case "设置":
 							location.href = "my_info.html"
@@ -169,7 +170,7 @@
 							location.href = "change_pwd.html"
 						break;
 						case "申请提现":
-							location.href = "captial.html"
+							location.href = "captial.html?yue=" + that.items[1].value;
 						break;
 					}
 				},
@@ -181,20 +182,21 @@
 						success: function(obj) {
 							if (obj.success) {
 								var data = obj.data;
-								that.userName = data.username;
-								that.vip_level = data.level;//等级名
-								that.items[0].value = '¥ ' + StringToFloat(data.integral_task);//任务收益
-								that.items[1].value = '¥ ' + StringToFloat(data.integral);//可用余额
-								that.items[2].value = '¥ ' + StringToFloat(data.integral_team);//团队收益
+								that.userName = data.name;
+								that.vip_level = data.level_name;//等级名
+								that.items[0].value = '¥ ' + StringToFloat(data.integral_total);//任务收益
+								that.items[1].value = '¥ ' + StringToFloat(data.integral_last);//可用余额
+								that.items[2].value = '¥ ' + StringToFloat(data.direct_task);//团队收益
 								that.items[3].value = '¥ ' + StringToFloat(data.integral_same_day);//今日收益
-								that.items[7].value = data.level_max + ' 个';//可做任务
+								that.items[7].value = data.task_last_count + ' 个';//可做任务
 								that.items[4].value = '¥ ' + StringToFloat(data.direct_share);//推荐奖励
 								that.items[5].value = data.team_count + ' 个';//团队人数
 								that.items[6].value = data.task_count_same_day + ' 个';//今日完成任务
+								that.user_phone = data.phone;//手机号码
+								that.time = data.level_expire//data.time;//到期时间
 								
 								//有问题的字段
-								that.user_phone = '15111475403';//手机号码
-								that.time = '2019/12/15'//data.time;//到期时间
+								
 								
 							}
 						}

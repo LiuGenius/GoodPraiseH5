@@ -99,11 +99,11 @@
 			<ul>
 				<li v-for="data in datas">
 					<div style="height: 90px;background: #fff;border-radius: 8px;margin: 1%;">
-						<img :src="data.img" style="float: left;height: 80px;margin-left: 5px;margin-top: 5px;">
-						<div style="display: inline-block;margin-left: 10px;">
-							<p style="margin-left: 20px;margin-top: 10px;">要求: {{data.task_name}}</p>
-							<p style="margin-left: 20px;margin-top: -4px;">需方: {{data.name}}</p>
-							<p style="margin-left: 20px;margin-top: -4px;border: #FF3159 solid 1px; border-radius: 12px;color: #FF3159;text-align: center;">剩余:
+						<img :src="data.img" style="float: left;height: 80px;margin-left: 5px;margin-top: 5px;width: 80px;">
+						<div style="display: inline-block;margin-left: 4px;">
+							<p style="margin-left: 10px;margin-top: 10px;font-size: 12px;">要求: {{data.task_name}}</p>
+							<p style="margin-left: 10px;margin-top: -4px;font-size: 12px;">需方: {{data.name}}</p>
+							<p style="margin-left: 10px;margin-top: -4px;border: #FF3159 solid 1px; border-radius: 12px;color: #FF3159;text-align: center;font-size: 12px;width: 100px;">剩余:
 								{{data.count}}</p>
 						</div>
 						<div style="display: inline-block;margin-left: 10px;height: 90px;float: right;margin-right: 20px;">
@@ -182,7 +182,7 @@
 										dataitem.img,
 										dataitem.count,
 										dataitem.link,
-										dataitem.name,
+										dataitem.phone,
 										dataitem.task_name,
 										"0.5"
 									))

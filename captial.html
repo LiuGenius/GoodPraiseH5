@@ -58,7 +58,7 @@
 			
 			<p style="margin-left: 12px;margin-top: 12px;">提现金额</p>
 			<input v-model="captial_fee" type="number" placeholder="" class="border_input"/>
-			<p style="margin-left: 12px;margin-top: 4px;font-size: 12px;">可用余额:4500元</p>
+			<p style="margin-left: 12px;margin-top: 4px;font-size: 12px;">可用余额: {{captial_fee}}</p>
 			<p @click="submit()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;margin-top: 40px;border-radius: 4px;">确认</p>
 		</div>
 	</body>
@@ -69,7 +69,7 @@
 				bankname:'中国建设银行',
 				username:"凡天才",
 				endNum:"4652",
-				captial_fee:'',
+				captial_fee:GetQueryString("yue"),
 				
 			},
 			mounted(){
