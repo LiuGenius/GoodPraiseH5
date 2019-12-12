@@ -4,6 +4,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, 
 		maximum-scale=1, user-scalable=no">
 		<meta charset="utf-8" />
+		<!-- <meta http-equiv="Access-Control-Allow-Origin" content="*" /> -->
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
@@ -21,33 +23,33 @@
 	</head>
 	<body style="background: #F7F7F7;">
 		<div id="id_app">
-			<img class="img-circle img_sy" src="img/WechatIMG13.jpeg">
-			<input v-model="user_account" type="text" placeholder="请输入登录账号" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;"/>
-			
-			<input v-model="user_pwd" type="password" placeholder="请输入登录密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;"/>
+			<img class="img-circle img_sy" src="img/app_logo.png">
+			<input v-model="user_account" type="text" placeholder="请输入登录账号" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;" />
 
-			<p style="margin-left: 12px;margin-top: 40px;" onclick="location.href='register.html'">注册</p>
-			<p @click="login()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;border-radius: 4px;margin-top: 8px;">登录</p>
-			
+			<input v-model="user_pwd" type="password" placeholder="请输入登录密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;" />
+
+			<p style="margin-left: 12px;display: none;" onclick="location.href='register.html'">注册</p>
+			<p @click="login()" style="margin-top: 40px;width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;border-radius: 4px;margin-top: 8px;">登录</p>
+
 		</div>
 
 	</body>
 	<script>
-		
+		addEventTest();
 		var app = new Vue({
-			el:"#id_app",
-			data:{
-				user_account:'',
-				user_pwd:''
+			el: "#id_app",
+			data: {
+				user_account: localStorage.getItem("userName"),
+				user_pwd: localStorage.getItem("password")
 			},
-			mounted(){
-				// if(localStorage.getItem('access-token') != null){
-				// 	var access_token = localStorage.getItem('access-token');
-				// 	location.href = "main.html";
-				// }
+			mounted() {
+				if(localStorage.getItem('access-token') != '' && localStorage.getItem('access-token') != null){
+					var access_token = localStorage.getItem('access-token');
+					location.href = "main.html";
+				}
 			},
-			methods:{
-				login:function(){
+			methods: {
+				login: function() {
 					var that = this;
 					ajax({
 						method: 'POST',
@@ -60,6 +62,8 @@
 							if(obj.success){
 								var access_token = obj.data['access-token'];
 								localStorage.setItem('access-token',access_token)
+								localStorage.setItem('userName',that.user_account)
+								localStorage.setItem('password',that.user_pwd)
 								location.href = "main.html";
 							}else{
 								alert(obj.message)

@@ -37,8 +37,7 @@
 	<body>
 		<div id="id_app">
 			<div style="background: #FFFFFF;">
-				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
-				<span style="margin-top: 4px;margin-left: -10px;">注册</span>
+				<p style="height: 50px;width: 100%;text-align: center;line-height: 50px;">注册</p>
 			</div>
 			<input v-model="user_phone" type="number" placeholder="请输入手机号码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;" />
 
@@ -52,12 +51,14 @@
 			<input v-model="user_pwd1" type="password" placeholder="请输入登录密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;" />
 
 			<input v-model="user_pwd2" type="password" placeholder="请再次输入密码" style="width: 94%;height: 40px;margin-top: 10px;margin-left: 3%;padding-left: 10px;outline: none;" />
+			
 
 			<p style="font-size: 10px;margin-left: 3%;margin-top: 40px;color: #FF3159;">*密码需由英文+字母+数字组成,最少6位</p>
 			<p @click="register()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;border-radius: 4px;margin-top: 10px;">注册</p>
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
@@ -84,7 +85,7 @@
 							username: that.user_name,//用户名字
 							password: that.user_pwd1,//用户密码
 							check_code: that.check_code,//验证码
-							code:'57',//邀请码
+							code:GetQueryString("uid"),//邀请码
 						},
 						success: function(obj) {
 							alert(obj.message);

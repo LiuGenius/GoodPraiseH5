@@ -4,12 +4,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,
 		maximum-scale=1, user-scalable=no">
 		<meta charset="utf-8" />
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
+
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="js/mobileSelect.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/address.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/mobileSelect.css" />
 		<title>个人信息</title>
 		<style>
 			ul,
@@ -38,30 +44,156 @@
 				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;">个人信息</span>
 			</div>
-			
+
 			<ul style="margin-top: 3%;">
 				<li v-for="data in datas" style="background: #FFFFFF;height: 50px;line-height: 50px;padding-left: 12px;padding-right: 5px;border-bottom: #E5E5E5 solid 1px;">
-					<div>
+					<div @click="onclickItem(data.key)">
 						<span>{{data.key}}</span>
-						<img style="height: 50px;width: 50px;float: right;padding: 16px;" src="img/icon_more.png" >
+						<img style="height: 50px;width: 50px;float: right;padding: 16px;" src="img/icon_more.png">
 						<span style="font-size: 15px;float: right;">{{data.value}}</span>
 					</div>
 				</li>
 			</ul>
-			<p style="width: 90%;margin-left: 5%;height: 50px;line-height: 50px;background: #1FB2F6;text-align: center;margin-top: 30px;color: #FFFFFF;border-radius: 4px;">退出系统</p>
+			<p @click="logout()" style="width: 90%;margin-left: 5%;height: 50px;line-height: 50px;background: #1FB2F6;text-align: center;margin-top: 30px;color: #FFFFFF;border-radius: 4px;">退出系统</p>
+
+			<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">{{editKey}}</h4>
+						</div>
+						<div class="modal-body">
+							<input v-model="editValue" placeholder="请输入" type="text" style="width: 100%;outline: none;border: none;" />
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button @click="submit()" type="button" class="btn btn-primary">确定</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			<div style="display: none;" id="select"></div>
 		</div>
+		<!-- Modal -->
+
 	</body>
 	<script>
+		addEventTest();
+		var sexSelect;
+		var addressSelect;
 		var app = new Vue({
-			el:"#id_app",
-			data:{
-				datas:[
-					{key:"姓名",value:"凡天才"},
-					{key:"手机",value:"15114754033"},
-					{key:"性别",value:"男"},
-					{key:"地址",value:"湖南-长沙-天心区"},
-					{key:"收款信息",value:"6217002922155625"},
-				]
+			el: "#id_app",
+			data: {
+				datas: [{
+						key: "姓名",
+						value: GetQueryString("name")
+					},
+					// {
+					// 	key: "手机",
+					// 	value: GetQueryString("phone")
+					// },
+					{
+						key: "性别",
+						value: GetQueryString("sex")
+					},
+					{
+						key: "地址",
+						value: GetQueryString("address")
+					},
+					{
+						key: "密码",
+						value: "修改密码"
+					},
+					// {key:"收款信息",value:""},
+				],
+				editKey: '修改姓名',
+				editValue: '',
+			},
+			methods: {
+				logout: function() {
+					location.href = "login.html";
+					localStorage.setItem("access-token", '');
+				},
+				onclickItem: function(tag) {
+					var that = this;
+					switch (tag) {
+						case "姓名":
+							$('#myModal').modal('toggle')
+							break;
+						case "手机":
+							$('#myModal2').modal('toggle')
+							break;
+						case "性别":
+							sexSelect = new MobileSelect({
+								trigger: '#select',
+								title: '性别选择',
+								wheels: [{
+									data: [{
+										id: '1',
+										value: '男'
+									}, {
+										id: '2',
+										value: '女'
+									}]
+								}],
+								callback: function(indexArr, data) {
+									that.datas[1].value = data[0].value;
+									that.changeUserInfo('sex', that.datas[1].value == "男" ? '0' : '1');
+								}
+							});
+							sexSelect.show();
+							break;
+						case "地址":
+							addressSelect = new MobileSelect({
+								trigger: '#select',
+								title: '地址选择',
+								wheels: [{
+									data: address
+								}],
+								callback: function(indexArr, data) {
+									var str = "";
+									for (var i = 0; i < data.length; i++) {
+										str += data[i].value + "-";
+									}
+									that.datas[2].value = str.substr(0, str.length - 1);
+									that.changeUserInfo('address', that.datas[2].value);
+								}
+							});
+							addressSelect.show();
+							break;
+						case "密码":
+							location.href = "change_pwd.html";
+							break;
+						case "收款信息":
+
+							break;
+					}
+				},
+				submit: function() {
+					var that = this;
+					if (that.editValue == '') {
+						alert('输入非法');
+						return;
+					}
+					$('#myModal').modal('toggle')
+					that.datas[0].value = that.editValue;
+					that.changeUserInfo('name', that.editValue);
+				},
+				changeUserInfo(key, value) {
+					ajax({
+						method: 'POST',
+						data: {
+							key: key,
+							value: value
+						},
+						url: EDIT_USERINFO + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							alert(obj.message);
+							if (obj.success) {}
+						}
+					})
+				}
 			}
 		});
 	</script>

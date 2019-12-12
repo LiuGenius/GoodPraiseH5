@@ -44,10 +44,16 @@
 	</head>
 	<body style="background: #F7F7F7;">
 		<div id="id_app">
+			
 			<div style="background: url(img/me_bg.png); background-size: 100% 100%;">
-				<img @click="clickMenu('设置')" style="width: 24px;height: 24px;margin-left: 90%;margin-top: 20px;" src="img/icon_setting.png" />
+				<div>
+					<p style="width: 100%;text-align: center;height: 40px;line-height: 40px;color: #FFFFFF;">我的</p>
+					<img @click="clickMenu('设置')" style="width: 24px;height: 24px;margin-left: 90%;margin-top: -40px;display: inline-block;" src="img/icon_setting.png" />
+				</div>
+				
+				
 				<div style="color: #FFFFFF;">
-					<img class="img-circle" style="height: 70px;width: 70px;margin-left: 20px;" src="img/WechatIMG13.jpeg" />
+					<img class="img-circle" style="height: 70px;width: 70px;margin-left: 20px;" src="img/app_logo.png" />
 					<div style="display: inline-block;height: 70px;position: absolute;left: 100px;">
 						<span>{{userName}}</span>
 						<span style="border-radius: 12px; border: #FFFFFF solid 1px;text-align: center;margin-left: 10px;padding-left: 10px;padding-right: 10px;">{{vip_level}}</span>
@@ -56,7 +62,7 @@
 					</div>
 					<p style="height: 80px;"></p>
 				</div>
-				<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 134px;border-radius: 8px;">
+				<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 150px;border-radius: 8px;">
 					<div v-for="item in items" class="item">
 						<p class="item_value">{{item.value}}</p>
 						<p class="item_key">{{item.key}}</p>
@@ -64,9 +70,9 @@
 					<p style="height: 4px;"></p>
 				</div>
 			
-			<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 334px;border-radius: 8px;">
-				<div v-for="menu in menus" class="item">
-					<img :src="menu.img" class="menu_img" @click="clickMenu(menu.name)"/>
+			<div style="background: #FFFFFF;width: 90%;margin-left: 5%;margin-right: 5%;position: absolute;top: 360px;border-radius: 8px;">
+				<div v-for="menu in menus" @click="clickMenu(menu.name)" class="item">
+					<img :src="menu.img" class="menu_img" />
 					<p class="item_key">{{menu.name}}</p>
 				</div>
 				<p style="height: 4px;"></p>
@@ -97,23 +103,25 @@
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				userName:"凡天才",
-				vip_level:"年卡",
-				user_phone:"15111475403",
-				time:"2019/12/12 12:00:13",
+				userName:"未登录",
+				ID:'',
+				vip_level:"-",
+				user_phone:"-",
+				time:"",
 				team_count:0,
 				items: [
-					{key:'任务收益',value:'¥ 0'},
-					{key:'可用余额',value:'¥ 0'},
-					{key:'团队收益',value:'¥ 0'},
-					{key:'今日收益',value:'¥ 0'},
-					{key:'推荐奖励',value:'¥ 0'},
-					{key:'团队人数',value:'0 个'},
-					{key:'今日完成任务',value:'0 个'},
-					{key:'可做任务',value:'0 个'}
+					{key:'任务收益',value:'¥ -'},
+					{key:'可用余额',value:'¥ -'},
+					{key:'团队收益',value:'¥ -'},
+					{key:'今日收益',value:'¥ -'},
+					{key:'推荐奖励',value:'¥ -'},
+					{key:'团队人数',value:'- 个'},
+					{key:'今日完成任务',value:'- 个'},
+					{key:'可做任务',value:'- 个'}
 				],
 				menus:[
 					{name:'升级记录',img:"img/menu_icon_level.png"},
@@ -125,9 +133,11 @@
 					{name:'提现记录',img:"img/menu_icon_txjl.png"},
 					{name:'资金明细',img:"img/menu_icon_zjmx.png"},
 					{name:'推广赚钱',img:"img/menu_icon_tgzq.png"},
-					{name:'修改密码',img:"img/menu_icon_xgmm.png"},
+					// {name:'修改密码',img:"img/menu_icon_xgmm.png"},
 					{name:'申请提现',img:"img/icon_menu_sqtx.png"},
-				]
+				],
+				sex:'男',
+				address:''
 			},
 			mounted(){
 				this.getUserInfo();
@@ -137,7 +147,7 @@
 					var that = this;
 					switch(str){
 						case "设置":
-							location.href = "my_info.html"
+							location.href = "my_info.html?name=" + that.userName + "&phone=" + that.user_phone + "&sex=" + that.sex + "&address=" + that.address;
 						break;
 						case "升级记录":
 							location.href = "updata_history.html"
@@ -164,7 +174,7 @@
 							location.href = "capital_info.html"
 						break;
 						case "推广赚钱":
-							
+							location.href = "qrcode.html?uid=" + that.ID;
 						break;
 						case "修改密码":
 							location.href = "change_pwd.html"
@@ -193,8 +203,11 @@
 								that.items[5].value = data.team_count + ' 个';//团队人数
 								that.items[6].value = data.task_count_same_day + ' 个';//今日完成任务
 								that.user_phone = data.phone;//手机号码
-								that.time = data.level_expire//data.time;//到期时间
+								that.time = (that.vip_level == '普通会员')? "无":data.level_expire//data.time;//到期时间
 								
+								that.ID = data.ID;
+								that.sex = (data.sex == "0") ? '男' : '女';
+								that.address = data.address;
 								//有问题的字段
 								
 								

@@ -44,6 +44,7 @@
 				height: 30px;
 				background: #FFFFFF;
 				padding-left: 8px;
+				text-align: center;
 			}
 
 			ul,
@@ -55,14 +56,21 @@
 
 			p,
 			span {
-				font-weight: 150;
+				font-size: 12px;
+				font-weight: 100;
 			}
+			.selTabText{
+				color: red;
+			}
+			.noselTabText{
+			}
+			
 			
 		</style>
 	</head>
 	<body style="background: #f0f0f0;">
 		<div id="id_app">
-
+			<p style="height: 40px;text-align: center;line-height: 40px;background: #FFFFFF;margin: 0px;">首页</p>
 
 			<div>
 				<ul style="height: 180px;">
@@ -77,7 +85,7 @@
 
 
 
-			<div style="background: #FFFFFF;padding-top: 20px;padding-bottom: 10px;" id="menu">
+			<div style="background: #FFFFFF;padding-top: 20px;padding-bottom: 10px; width: 100%;" id="menu">
 				<div style="width: 25%;">
 					<img onclick="location.href='message_list.html'" style="width: 40%;margin-left: 30%;" src="img/WechatIMG15.png">
 					<p style="width: 100%;text-align: center;font-size: 12px;margin-top: 4px;">新闻公告</p>
@@ -88,16 +96,20 @@
 				<div class="cont">
 					<ul class="state">
 						<li v-for="(title,index) in titleList">
-							<img :src="title.logo" style="width: 16px;height: 16px;">
-							<span @click="clickTab(title.ID)" style="font-size: 12px;padding-left: 8px;">{{title.name}}</span>
+							<div @click="clickTab(title.ID,index)">
+								<img :src="title.logo" style="width: 16px;height: 16px;">
+								<span :class="(index == selTab) ? 'selTabText':'noselTabText'" >{{title.name}}</span>
+							</div>
+							
 						</li>
 					</ul>
 				</div>
 			</div>
 
+			<p v-if="isHaveData" style="font-size: 20px;line-height: 200px;width: 100%;text-align: center;">暂无任务</p>
 
 			<ul>
-				<li v-for="data in datas">
+				<li v-for="(data,index) in datas">
 					<div style="height: 90px;background: #fff;border-radius: 8px;margin: 1%;">
 						<img :src="data.img" style="float: left;height: 80px;margin-left: 5px;margin-top: 5px;width: 80px;">
 						<div style="display: inline-block;margin-left: 4px;">
@@ -108,11 +120,12 @@
 						</div>
 						<div style="display: inline-block;margin-left: 10px;height: 90px;float: right;margin-right: 20px;">
 							<p style="height: 20px;line-height: 45px;font-size: 14px;font-weight: bold;color: #FF3159;text-align: center;">¥{{data.money}}元</p>
-							<p @click="receiveTask(data.ID)" style="float: inherit;height: 30px;color: #FFFFFF;background: #FF3159;font-size: 12px;width: 60px;margin-top: 15px;text-align: center;line-height: 30px;border-radius: 6px;">接单</p>
+							<p @click="receiveTask(data.ID,index)" style="float: inherit;height: 30px;color: #FFFFFF;background: #FF3159;font-size: 12px;width: 60px;margin-top: 15px;text-align: center;line-height: 30px;border-radius: 6px;">接单</p>
 						</div>
 					</div>
 				</li>
 			</ul>
+			
 		</div>
 		<p style="height: 70px;"></p>
 
@@ -139,13 +152,16 @@
 
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
 				titleList: [],
 				datas: [],
 				bannerList: [],
-				cIndex:0
+				cIndex:0,
+				isHaveData:false,
+				selTab:0,
 			},
 			mounted() {
 				this.getData();
@@ -161,7 +177,7 @@
 				/**
 				 * @param {Object} ID切换tab
 				 */
-				clickTab: function(ID) {
+				clickTab: function(ID,index) {
 					var that = this;
 					ajax({
 						method: 'POST',
@@ -187,6 +203,12 @@
 										"0.5"
 									))
 								}
+								that.selTab = index;
+								if(that.datas.length == 0){
+									that.isHaveData = true;
+								}else{
+									that.isHaveData = false;
+								}
 
 							}
 						}
@@ -195,7 +217,8 @@
 				/**
 				 * 接取任务
 				 */
-				receiveTask: function(id) {
+				receiveTask: function(id,index) {
+					var that = this;
 					ajax({
 						method: 'POST',
 						dataType: "json",
@@ -206,6 +229,7 @@
 						success: function(obj) {
 							if (obj.success) {
 								alert("任务接取成功")
+								that.datas.splice(index,1)
 							} else {
 								alert(obj.message)
 							}

@@ -36,14 +36,16 @@
 		<div id="id_app">
 			<div style="background: #FFFFFF;">
 				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
-				<span style="margin-top: 4px;margin-left: -10px;">{{title}}</span>
+				<span style="margin-top: 4px;margin-left: -10px;">新闻详情</span>
 			</div>
+			<h3 style="margin-left: 12px;margin-top: 4px;">{{title}}</h3>
 			
 			<p style="font-size: 12px;margin-left: 12px;margin-top: 20px;margin-right: 12px;">最近更新:  {{time}}</p>
 			<p v-html="content" style="margin-left: 12px;margin-top: 10px;margin-right: 12px;"></p>
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el:"#id_app",
 			data:{

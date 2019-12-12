@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1,
+		maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 生产环境版本，优化了尺寸和速度 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+		<title>推广赚钱</title>
+	</head>
+	<body style="background: url(img/bg_tgzq.png);background-size: 100%;">
+		<div id="id_app">
+			<div style="background: #FFFFFF;">
+				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
+				<span style="margin-top: 4px;margin-left: -10px;width: 70%;">推广赚钱</span>
+			</div>
+			<div style="padding: 8px;margin: 26.5%;margin-top: 200px;width: 100%;text-align: center;" id="qrcode"></div>
+		</div>
+	</body>
+	<script>
+		addEventTest();
+		var qrcode = new QRCode("qrcode", {
+		    text: "http://fans.yc699.com/reg/register.html?uid=" + GetQueryString("uid"),
+		    width: 160,
+		    height: 160,
+		    colorDark : "#000000",
+		    colorLight : "#ffffff",
+		    correctLevel : QRCode.CorrectLevel.H
+		});
+	</script>
+</html>

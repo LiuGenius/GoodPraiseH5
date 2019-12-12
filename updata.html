@@ -4,8 +4,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,
 		maximum-scale=1, user-scalable=no">
 		<meta charset="utf-8" />
+		<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		<script src="js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
@@ -28,13 +30,13 @@
 				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;">立即升级</span>
 				<span onclick="location.href='updata_history.html'" style="position: absolute;right: 20px;line-height: 50px;">升级记录</span>
-				<img style="width: 60%;margin-left: 20%;" src="img/WechatIMG13.jpeg" />
+				<img style="width: 60%;margin-left: 20%;" :src="alipayQrCode" />
 			</div>
 
-			<p style="width: 90%;margin-left: 5%;text-align: center;height: 40px;line-height: 40px;background: #8BC34A;color: #FFFFFF;margin-top: 10px;">保存二维码图片</p>
+			<p @click="downloadIamge()" style="width: 90%;margin-left: 5%;text-align: center;height: 40px;line-height: 40px;background: #8BC34A;color: #FFFFFF;margin-top: 10px;">查看二维码图片</p>
 
 			<p style="margin-left: 5%;margin-right: 5%;">
-				{{levelName}}:            ¥  {{levelPrice}}<br />
+				{{levelName}}: ¥ {{levelPrice}}<br />
 			</p>
 
 			<p style="margin-left: 5%;margin-right: 5%;">
@@ -44,19 +46,67 @@
 			</p>
 			<input v-model="alipayAccount" placeholder="请输入您的支付宝账号" type="text" style="border: #E8E8E8 solid 1px;width: 90%;margin-left: 5%;height: 40px;padding-left: 10px;outline: none;" />
 			<p @click="submit()" style="width: 90%;margin-left: 5%;text-align: center;height: 40px;line-height: 40px;background: #FF9800;color: #FFFFFF;margin-top: 10px;">提交</p>
+		
+			<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<img style="width: 80%;margin-left: 10%;" :src="alipayQrCode" />
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				levelName:GetQueryString('levelName'),
-				levelPrice:GetQueryString('levelPrice'),
-				alipayAccount:''
+				levelName: GetQueryString('levelName'),
+				levelPrice: GetQueryString('levelPrice'),
+				level_id: GetQueryString("level_id"),
+				alipayAccount: '',
+				alipayQrCode: '',
+
+			},
+			mounted() {
+				this.getQrCode();
 			},
 			methods: {
-				submit:function(){
-				}
+				submit: function() {
+					var that = this;
+					ajax({
+						method: 'POST',
+						data:{
+							level_id:that.level_id,
+							account:that.alipayAccount
+						},
+						url: UPDATA_PAY + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							console.log(obj)
+							alert(obj.message)
+							if (obj.success) {
+								history.back()
+							}
+						}
+					})
+				},
+				getQrCode: function() {
+					var that = this;
+					ajax({
+						method: 'POST',
+						url: ALIPAY_QRCODE + "?access-token=" + localStorage.getItem('access-token'),
+						success: function(obj) {
+							console.log(obj)
+							if (obj.success) {
+								that.alipayQrCode = obj.data.url;
+							}
+						}
+					})
+				},
+				// 下载
+				downloadIamge: function() {
+					$('#myModal').modal('toggle')
+				},
 			}
 		});
 	</script>

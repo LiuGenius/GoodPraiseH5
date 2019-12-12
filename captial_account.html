@@ -64,6 +64,7 @@
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el:"#id_app",
 			data:{
@@ -97,9 +98,7 @@
 										bank.ID,bank.name
 									));
 								}
-							} else {
-								alert(obj.message)
-							}
+							} 
 						}
 					})
 				},
@@ -116,6 +115,9 @@
 						},
 						success: function(obj) {
 							alert(obj.message)
+							if(obj.success){
+								history.back();
+							}
 						}
 					})
 				},
@@ -128,6 +130,7 @@
 							"access-token":localStorage.getItem('access-token')
 						},
 						success: function(obj) {
+							console.log(obj)
 							if (obj.success) {
 								if(obj.data == null){
 									return;
@@ -136,9 +139,7 @@
 								that.name = obj.data.name;
 								that.bank_card = obj.data.bank_card;
 								that.bank_id = obj.data.bank_id;
-							} else {
-								alert(obj.message)
-							}
+							} 
 						}
 					})
 				}

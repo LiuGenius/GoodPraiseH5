@@ -38,7 +38,7 @@
 			<img id="id_img" @click="chooseFile()" style="width: 86%;margin-left: 7%;" src="img/icon_add_img.png" />
 			<p @click="submit()" style="width: 70%;margin-left: 15%;text-align: center;height: 40px;line-height: 40px;background: #4287FF;color: #FFFFFF;margin-top: 20px;border-radius: 4px;">提交</p>
 			<form enctype="multipart/form-data" id="uploadForm">
-				<input onchange="showPicture(this)" style="display: none;" accept="image/*"  id="id_file" type="file" />
+				<input onchange="showPicture(this)" style="display: none;" accept="image/*" id="id_file" type="file" />
 			</form>
 		</div>
 
@@ -46,6 +46,7 @@
 
 	</body>
 	<script>
+		addEventTest();
 		var fileUrl = '';
 		var app = new Vue({
 			el: "#id_app",
@@ -56,6 +57,10 @@
 			},
 			methods: {
 				submit: function() {
+					if (fileUrl == '') {
+						alert('请上传截图');
+						return;
+					}
 					ajax({
 						method: 'POST',
 						url: SUBMIT_TASK + "?access-token=" + localStorage.getItem('access-token'),

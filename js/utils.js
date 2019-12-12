@@ -26,7 +26,7 @@ function ajax(opt) {
 	if (opt.method.toUpperCase() === 'POST') {
 		xmlHttp.open(opt.method, opt.url, opt.async);
 		xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
-		xmlHttp.setRequestHeader('Access-Control-Allow-Origin', 'http://192.168.1.243')
+		// xmlHttp.setRequestHeader('Access-Control-Allow-Origin', '*')
 		xmlHttp.send(postData);
 	} else if (opt.method.toUpperCase() === 'GET') {
 		xmlHttp.open(opt.method, opt.url + '?' + postData, opt.async);

@@ -10,7 +10,7 @@
 		<script src="js/urlAddress.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-		<title>提现记录</title>
+		<title>资金明细</title>
 		<style>
 			ul,
 			li {
@@ -56,44 +56,45 @@
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el:"#id_app",
 			data:{
-				// datas:datas,
-				datas:[
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-					{money:'0.5',remake:'任务收入',time:'2019/09/09 12:55'},
-				],
+				datas:[],
 				total_money:4.5
 			},
 			mounted(){
-				// this.getData();
+				this.getData();
 			},
 			methods:{
 				getData(){
 					var that = this;
 					ajax({
 						method: 'POST',
-						url: MY_TEAM + "?access-token=" + localStorage.getItem('access-token'),
+						url: CAPITAL_INFO + "?access-token=" + localStorage.getItem('access-token'),
 						success: function(obj) {
+							console.log(obj);
+							that.total_money = obj.data.total;
 							if (obj.success) {
-								for (var i = 0; i < obj.data.length; i++) {
+								for (var i = 0; i < obj.data.list.length; i++) {
+									var data = obj.data.list[i];
+									that.datas.push(that.capital(
+										data.add_time,
+										data.integral,
+										data.source
+									));
 								}
-							} else {
-								alert(obj.message)
-							}
+							} 
 						}
 					})
 				},
+				capital:function(add_time,integral,source){
+					var capital = new Object();
+					capital.time = add_time;
+					capital.money = integral;
+					capital.remake = source == '0' ? '任务收入' : '团队收入';
+					return capital;
+				}
 			}
 		});
 	</script>

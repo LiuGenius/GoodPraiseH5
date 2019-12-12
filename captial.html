@@ -33,13 +33,39 @@
 			}
 			.border_input{
 				outline: none;
-				width: 96%;
-				margin-left: 2%;
+				width: 90%;
 				border: none;
 				border-bottom: #E2E2E2 solid 1px;
 				height: 40px;
 				background: #F7F7F7;
-				padding-left: 12px;
+				padding-left: 24px;
+				display: inline-block;
+			}
+			.border_input_sel{
+				outline: none;
+				width: 90%;
+				border: none;
+				border-bottom: #E2E2E2 solid 1px;
+				height: 40px;
+				background: #F7F7F7;
+				padding-left: 24px;
+				display: inline-block;
+				color: red;
+				font-weight: bold;
+			}
+			
+			/* 可以设置不同的进入和离开动画 */
+			/* 设置持续时间和动画函数 */
+			.slide-fade-enter-active {
+			  transition: all .3s ease;
+			}
+			.slide-fade-leave-active {
+			  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+			}
+			.slide-fade-enter, .slide-fade-leave-to
+			/* .slide-fade-leave-active for below version 2.1.8 */ {
+			  transform: translateX(10px);
+			  opacity: 0;
 			}
 		</style>
 	</head>
@@ -57,30 +83,78 @@
 			</div>
 			
 			<p style="margin-left: 12px;margin-top: 12px;">提现金额</p>
-			<input v-model="captial_fee" type="number" placeholder="" class="border_input"/>
+			<div>
+				<span style="font-weight: 400;font-size: 20px;position: relative;left: 20px;top: 4px;">¥</span>
+				<input :class="isError ? 'border_input_sel':'border_input'" @input="feeChange()" v-model="captial" type="number" placeholder=""/>
+			</div>
+			 <transition name="slide-fade">
+			    <p v-if="isError" style="margin-left: 12px;margin-top: 4px;font-size: 12px;color: red;">提现额度不足</p>
+			  </transition>
+			
 			<p style="margin-left: 12px;margin-top: 4px;font-size: 12px;">可用余额: {{captial_fee}}</p>
 			<p @click="submit()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;margin-top: 40px;border-radius: 4px;">确认</p>
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el:"#id_app",
 			data:{
-				bankname:'中国建设银行',
-				username:"凡天才",
-				endNum:"4652",
-				captial_fee:GetQueryString("yue"),
+				bankname:'',
+				username:"",
+				endNum:"",
+				captial_fee:0,
+				captial:'',
+				isError:false
 				
 			},
 			mounted(){
 				this.getBankInfo();
 			},
 			methods:{
-				getBankInfo(){
+				getBankInfo:function(){
 					var that = this;
+					ajax({
+						method: 'GET',
+						url: APPLY_CAPTITAL,
+						data:{
+							"access-token":localStorage.getItem('access-token')
+						},
+						success: function(obj) {
+							var bankinfo = obj.data.bank_info;
+							that.bankname = bankinfo.branch_name
+							that.username = bankinfo.name
+							that.endNum = (bankinfo.bank_card + "").substring(bankinfo.bank_card.length - 4,bankinfo.bank_card.length)
+							that.captial_fee = obj.data.balance;
+						}
+					})
 				},
-				submit(){
+				submit:function(){
 					var that = this;
+					if(isError){
+						return;
+					}
+					ajax({
+						method: 'POST',
+						url: APPLY_CAPTITAL + "?access-token=" + localStorage.getItem('access-token'),
+						data:{
+							amount:that.captial
+						},
+						success: function(obj) {
+							alert(obj.message)
+							if(obj.success){
+								history.back();
+							}
+						}
+					})
+				},
+				feeChange:function(){
+					var that = this;
+					if(parseFloat(that.captial) > parseFloat(that.captial_fee)){
+						that.isError = true;
+					}else{
+						that.isError = false;
+					}
 				}
 			}
 		});

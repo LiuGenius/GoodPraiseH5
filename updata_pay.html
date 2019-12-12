@@ -27,7 +27,7 @@
 	</head>
 	<body style="background: #F7F7F7;">
 		<div id="id_app">
-
+			<p style="height: 40px;text-align: center;line-height: 40px;background: #FFFFFF;margin: 0px;">购买</p>
 			<ul id="id_list" style="margin: 2%;">
 				<li style="color: #FFFFFF;margin: 1%;overflow: hidden;" v-for="(data,index) in datas ">
 					<!-- <img src="img/季度卡.png" style="width: 100%;"/> -->
@@ -36,8 +36,8 @@
 						<span style="position: absolute;right: 20px;">会员费: {{data.price}}元</span>
 						<p style="margin-left: 20px;margin-top: 20px;">每天可做任务: {{data.task_count}}个</p>
 						<p style="margin-left: 20px;margin-top: -4px;">{{data.description}}</p>
-						<p style="margin-left: 20px;margin-top: -4px;">直接邀请同伴奖励: 20 %</p>
-						<p @click="pay(data.name,data.price)" style="width: 100%;text-align: center;height: 40px;line-height: 40px;">立即升级(剩余:{{data.surplus}})</p>
+						<p style="margin-left: 20px;margin-top: -4px;">直接邀请同伴奖励: {{data.direct_rate}} %</p>
+						<p @click="pay(data.name,data.price,data.ID)" style="width: 100%;text-align: center;height: 40px;line-height: 40px;">立即升级(剩余:{{data.surplus}})</p>
 					</div>
 				</li>
 			</ul>
@@ -65,20 +65,23 @@
 
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
 				datas: [],
-				imgArrays : ["level_1", "level_2", "level_3"]
+				imgArrays: ["level_1", "level_2", "level_3"],
 			},
-			mounted(){
+			mounted() {
 				this.getData();
 			},
 			methods: {
-				pay: function(levelName, levelPrice) {
-					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + levelPrice);
+				pay: function(levelName, levelPrice, level_id) {
+					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + levelPrice + "&level_id=" +
+						level_id);
 				},
-				Packge:function(ID, add_time, description, name, price, sort, status, task_count, type, img,surplus){
+				Packge: function(ID, add_time, description, name, price, sort, status, task_count, type, img, surplus,
+					direct_rate) {
 					var data = new Object();
 					data.ID = ID;
 					data.add_time = add_time;
@@ -91,42 +94,54 @@
 					data.type = type;
 					data.img = img;
 					data.surplus = surplus;
+					data.direct_rate = direct_rate;
 					return data;
 				},
-				getData:function(){
+				getData: function() {
 					var that = this;
-				
 					ajax({
 						method: 'POST',
-						url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
+						url: USER_INFO + "?access-token=" + localStorage.getItem('access-token'),
 						success: function(obj) {
 							if (obj.success) {
-								for (var i = 0; i < obj.data.length; i++) {
-									var packge = obj.data[i];
-									that.datas.push(that.Packge(
-										packge.ID,
-										packge.add_time,
-										packge.description,
-										// '这里是描述',
-										packge.name,
-										StringToFloat(packge.price),
-										packge.sort,
-										packge.status,
-										packge.max,
-										packge.type,
-										that.imgArrays[i % 3],
-										i * 123
-									));
+								if (obj.data.level_name == '普通会员') {
+									ajax({
+										method: 'POST',
+										url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
+										success: function(obj) {
+											if (obj.success) {
+												for (var i = 0; i < obj.data.length; i++) {
+													var packge = obj.data[i];
+													that.datas.push(that.Packge(
+														packge.ID,
+														packge.add_time,
+														packge.description,
+														// '这里是描述',
+														packge.name,
+														StringToFloat(packge.price),
+														packge.sort,
+														packge.status,
+														packge.max,
+														packge.type,
+														that.imgArrays[i % 3],
+														packge.count,
+														packge.direct_rate
+													));
+												}
+											}
+										}
+									})
+								} else {
+									alert('您已经购买过会员了!');
+									history.back();
 								}
-							} else {
-								alert(obj.message)
 							}
 						}
 					})
+
+
 				}
 			}
 		});
-
-		
 	</script>
 </html>

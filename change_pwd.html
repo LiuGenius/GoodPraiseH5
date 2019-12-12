@@ -50,6 +50,7 @@
 		</div>
 	</body>
 	<script>
+		addEventTest();
 		var app = new Vue({
 			el:"#id_app",
 			data:{
@@ -74,6 +75,9 @@
 						},
 						success: function(obj) {
 							alert(obj.message)
+							if(obj.success){
+								history.back()
+							}
 						}
 					})
 				}

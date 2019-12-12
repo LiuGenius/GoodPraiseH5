@@ -54,14 +54,15 @@
 	</style>
 	<body>
 		<div id="id_app">
+			<p style="height: 40px;text-align: center;line-height: 40px;background: #FFFFFF;margin: 0px;">任务</p>
 			<div style="background: #FFFFFF;">
-				<div class="tab">
+				<div @click="clickTab(0)" class="tab">
 					<img style="width: 12px;" src='img/douying.png' />
-					<span @click="clickTab(0)">待完成</span>
+					<span :style="selTab == 0 ? 'color:red':''">待完成</span>
 				</div>
-				<div class="tab">
+				<div @click="clickTab(1)" class="tab">
 					<img style="width: 12px;" src='img/douying.png' />
-					<span @click="clickTab(1)">已完成</span>
+					<span :style="selTab == 1 ? 'color:red':''">已完成</span>
 				</div>
 			</div>
 			<!-- 待完成 -->
@@ -87,7 +88,7 @@
 			<ul v-if="!showStatus">
 				<li v-for="data in taskDatas">
 					<div style="padding: 2%;" class="item_bg">
-						<span>{{data.task_name}}</span> <span style='float: right;'>已完成</span>
+						<span>{{data.task_name}}  ({{data.org}})</span> <span style='float: right;'>已完成</span>
 						<p style='color: #bbbbbb;margin-top: 8px;'>任务收益: ¥{{data.integral}}</p>
 						<p style='color: #bbbbbb;'>申请时间: {{data.add_time}}</p>
 					</div>
@@ -119,23 +120,27 @@
 
 	<script>
 
+		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
 				showStatus: true,
 				taskDatas: [],
+				selTab:0
 			},
 			mounted() {
 				this.getData(0);
 			},
 			methods: {
 				clickTab: function(tag) {
+					this.selTab = tag;
 					this.taskDatas.splice(0, this.taskDatas.length)
 					this.showStatus = (tag == 0);
 					this.getData(tag);
 				},
 				openVideo: function(url) {
-					location.href = url;
+					// location.href = "webview.html?taskUrl=" + url;
+					plus.runtime.openWeb(url)
 				},
 				copyUrl: function(url) {
 					let oInput = document.createElement('input')
@@ -150,7 +155,7 @@
 				submitTask: function(v1, v2, v3) {
 					location.href = "submit_task.html?id=" + v1 + "&taskName=" + decodeURI(v2) + "&taskMoney=" + v3;
 				},
-				Task: function(ID, add_time, img, link, name, task_name, weixin, integral) {
+				Task: function(ID, add_time, img, link, name, task_name, weixin, integral,status,platform) {
 					var task = new Object();
 					task.ID = ID;
 					task.add_time = add_time;
@@ -160,6 +165,27 @@
 					task.task_name = task_name;
 					task.weixin = weixin;
 					task.integral = StringToFloat(integral);
+					
+					if(status == "1"){
+						task.state = '审核中';
+					}else{
+						task.state = '已完成';
+					}
+					
+					switch(platform){
+						case "1":
+						task.org = "抖音任务"
+						break;
+						case "2":
+						task.org = "快手任务"
+						break;
+						case "3":
+						task.org = "微视任务"
+						break;
+						case "4":
+						task.org = "火山任务"
+						break;
+					}
 
 					return task;
 				},
@@ -183,7 +209,9 @@
 										taskJson.name,
 										taskJson.task_name,
 										taskJson.weixin,
-										taskJson.integral
+										taskJson.integral,
+										taskJson.status,
+										taskJson.platform
 									));
 								}
 							}
