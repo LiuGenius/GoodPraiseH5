@@ -99,7 +99,7 @@
 					},
 					{
 						key: "地址",
-						value: GetQueryString("address")
+						value: GetQueryString("address") == 'null' ? '' : GetQueryString("address")
 					},
 					{
 						key: "密码",

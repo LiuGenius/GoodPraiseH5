@@ -207,7 +207,7 @@
 								
 								that.ID = data.ID;
 								that.sex = (data.sex == "0") ? '男' : '女';
-								that.address = data.address;
+								that.address = (data.address + "") == 'null' ? '' : data.address;
 								//有问题的字段
 								
 								
