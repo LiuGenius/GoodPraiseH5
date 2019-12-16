@@ -49,10 +49,59 @@ function GetQueryString(name) {
 	return null;
 }
 
-function StringToFloat(str){
+function StringToFloat(str) {
 	return parseFloat(str).toFixed(2)
 }
 
-function getLocalTime(nS) {  
- return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');  
+function getLocalTime(nS) {
+	return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+}
+
+
+function checkVersionUpdata(updataUrl) {
+	document.addEventListener('plusready', function() {
+		ajax({
+			method: 'GET',
+			dataType: "json",
+			url: updataUrl, //+ "?access-token=" + localStorage.getItem('access-token'),
+			data: {
+				// versionCode: plus.runtime.versionCode,
+				// version:plus.runtime.version,
+				name:'H59014AA1',
+				version:plus.runtime.version,
+				versionCode: plus.runtime.versionCode,
+				'access-token':localStorage.getItem('access-token')
+			},
+			success: function(obj) {
+				var data = obj.data;
+				console.log(data.update + "  wgtUrl: " + data.wgtUrl);
+				var isNeedUpdata = data.update; //是否需要更新
+				if (isNeedUpdata) {
+					var downloadUrl = data.wgtUrl;
+					if(downloadUrl == ''){
+						return;
+					}
+					//开始下载
+					var dtask = plus.downloader.createDownload(downloadUrl, {}, function(file, status) {
+						// 下载完成
+						if (status == 200) {
+							//开始安装
+							plus.runtime.install(file, {
+								force: false
+							}, function() {
+								plus.nativeUI.toast("升级成功,正在重启应用");
+								plus.runtime.restart();
+							}, function(e) {
+								plus.nativeUI.toast("更新失败" + e.message);
+							});
+						} else {
+							plus.nativeUI.toast("下载更新文件失败");
+						}
+					});
+					dtask.start();
+				}
+			}
+		})
+	}, false);
+	
 }

@@ -212,43 +212,43 @@
                 "ios" : {
                     "iphone" : {
                         "default" : "", /*iPhone3启动图片选，分辨率：320x480*/
-                        "retina35" : "/Users/dev/Desktop/粉丝帮启屏页/640-960.png", /*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
-                        "retina40" : "/Users/dev/Desktop/粉丝帮启屏页/640-1136.png", /*4.0 英寸设备(iPhone5/iPhone5s)启动图片，分辨率：640x1136*/
-                        "retina47" : "/Users/dev/Desktop/粉丝帮启屏页/750-1334.png", /*4.7 英寸设备(iPhone6)启动图片，分辨率：750x1334*/
-                        "retina55" : "/Users/dev/Desktop/粉丝帮启屏页/1242-2208.png", /*5.5 英寸设备(iPhone6 Plus)启动图片，分辨率：1242x2208*/
-                        "retina55l" : "/Users/dev/Desktop/粉丝帮启屏页/2208-1242.png", /*5.5 英寸设备(iPhone6 Plus)横屏启动图片，分辨率：2208x1242*/
-                        "portrait-896h@3x" : "/Users/dev/Desktop/粉丝帮启屏页/1242-2688.png",
-                        "landscape-896h@3x" : "/Users/dev/Desktop/粉丝帮启屏页/2688-1242.png",
-                        "portrait-896h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/828-1792.png",
-                        "landscape-896h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/1792-828.png",
-                        "iphonex" : "/Users/dev/Desktop/粉丝帮启屏页/1125-2436.png",
-                        "iphonexl" : "/Users/dev/Desktop/粉丝帮启屏页/2436-1125.png",
-                        "retina47l" : "/Users/dev/Desktop/粉丝帮启屏页/1334-750.png",
-                        "retina40l" : "/Users/dev/Desktop/粉丝帮启屏页/1136-640.png"
+                        "retina35" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/640-960.png", /*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
+                        "retina40" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/640-1136.png", /*4.0 英寸设备(iPhone5/iPhone5s)启动图片，分辨率：640x1136*/
+                        "retina47" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/750-1334.png", /*4.7 英寸设备(iPhone6)启动图片，分辨率：750x1334*/
+                        "retina55" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1242-2208.png", /*5.5 英寸设备(iPhone6 Plus)启动图片，分辨率：1242x2208*/
+                        "retina55l" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2208-1242.png", /*5.5 英寸设备(iPhone6 Plus)横屏启动图片，分辨率：2208x1242*/
+                        "portrait-896h@3x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1242-2688.png",
+                        "landscape-896h@3x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2688-1242.png",
+                        "portrait-896h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/828-1792.png",
+                        "landscape-896h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1792-828.png",
+                        "iphonex" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1125-2436.png",
+                        "iphonexl" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2436-1125.png",
+                        "retina47l" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1334-750.png",
+                        "retina40l" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1136-640.png"
                     },
                     "ipad" : {
                         "portrait" : "", /*iPad竖屏启动图片，分辨率：768x1004*/
                         "portrait-retina" : "", /*iPad高分屏竖屏图片，分辨率：1536x2008*/
                         "landscape" : "", /*iPad横屏启动图片，分辨率：1024x748*/
                         "landscape-retina" : "", /*iPad高分屏横屏启动图片，分辨率：2048x1496*/
-                        "portrait7" : "/Users/dev/Desktop/粉丝帮启屏页/768-1024.png", /*iPad iOS7竖屏启动图片，分辨率：768x1024*/
-                        "portrait-retina7" : "/Users/dev/Desktop/粉丝帮启屏页/1536-2048.png", /*iPad iOS7高分屏竖屏图片，分辨率：1536x2048*/
-                        "landscape7" : "/Users/dev/Desktop/粉丝帮启屏页/1024-768.png", /*iPad iOS7横屏启动图片，分辨率：1024x768*/
-                        "landscape-retina7" : "/Users/dev/Desktop/粉丝帮启屏页/2048-1536.png", /*iPad iOS7高分屏横屏启动图片，分辨率：2048x1536*/
-                        "portrait-1366h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/2048-2732.png",
-                        "landscape-1366h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/2732-2048.png",
-                        "portrait-1194h@2" : "/Users/dev/Desktop/粉丝帮启屏页/1668-2388.png",
-                        "landscape-1194h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/2388-1668.png",
-                        "portrait-1112h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/1668-2224.png",
-                        "landscape-1112h@2x" : "/Users/dev/Desktop/粉丝帮启屏页/2224-1668.png"
+                        "portrait7" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/768-1024.png", /*iPad iOS7竖屏启动图片，分辨率：768x1024*/
+                        "portrait-retina7" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1536-2048.png", /*iPad iOS7高分屏竖屏图片，分辨率：1536x2048*/
+                        "landscape7" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1024-768.png", /*iPad iOS7横屏启动图片，分辨率：1024x768*/
+                        "landscape-retina7" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2048-1536.png", /*iPad iOS7高分屏横屏启动图片，分辨率：2048x1536*/
+                        "portrait-1366h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2048-2732.png",
+                        "landscape-1366h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2732-2048.png",
+                        "portrait-1194h@2" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1668-2388.png",
+                        "landscape-1194h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2388-1668.png",
+                        "portrait-1112h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/1668-2224.png",
+                        "landscape-1112h@2x" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/2224-1668.png"
                     }
                 },
                 "android" : {
                     "mdpi" : "", /*普通屏启动图片，分辨率：240x282*/
                     "ldpi" : "", /*大屏启动图片，分辨率：320x442*/
-                    "hdpi" : "/Users/dev/Desktop/粉丝帮启屏页/点9/480.9.png", /*高分屏启动图片，分辨率：480x762*/
-                    "xhdpi" : "/Users/dev/Desktop/粉丝帮启屏页/点9/720.9.png", /*720P高分屏启动图片，分辨率：720x1242*/
-                    "xxhdpi" : "/Users/dev/Desktop/粉丝帮启屏页/点9/1080.9.png" /*1080P高分屏启动图片，分辨率：1080x1882*/
+                    "hdpi" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/点9/480.9.png", /*高分屏启动图片，分辨率：480x762*/
+                    "xhdpi" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/点9/720.9.png", /*720P高分屏启动图片，分辨率：720x1242*/
+                    "xxhdpi" : "/Users/dev/Desktop/粉丝帮/粉丝帮启屏页/点9/1080.9.png" /*1080P高分屏启动图片，分辨率：1080x1882*/
                 }
             },
             "plugins" : {

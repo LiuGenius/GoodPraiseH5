@@ -67,7 +67,7 @@
 			</div>
 			<!-- 待完成 -->
 			<ul v-if="showStatus">
-				<li v-for="data in taskDatas" >
+				<li v-for="data in taskDatas">
 					<div class="item_bg">
 						<img :src="data.img" style="margin-left: 12px;width: 70px;margin-bottom: 30px;" />
 						<ul style="margin-top: 0px;display: inline-block;margin-left: 30px;">
@@ -88,7 +88,7 @@
 			<ul v-if="!showStatus">
 				<li v-for="data in taskDatas">
 					<div style="padding: 2%;" class="item_bg">
-						<span>{{data.task_name}}  ({{data.org}})</span> <span style='float: right;'>已完成</span>
+						<span>{{data.task_name}} ({{data.org}})</span> <span style='float: right;'>已完成</span>
 						<p style='color: #bbbbbb;margin-top: 8px;'>任务收益: ¥{{data.integral}}</p>
 						<p style='color: #bbbbbb;'>申请时间: {{data.add_time}}</p>
 					</div>
@@ -96,7 +96,7 @@
 			</ul>
 		</div>
 		<p style="height: 70px;"></p>
-		
+
 		<div style="position: fixed;bottom: 0px;z-index: 999;width: 100%;background: #FFFFFF;line-height: 20px;padding-top: 10px;">
 			<div onclick="location.href='main.html'" style="width: 24%;display: inline-block;text-align: center;">
 				<img style="width: 20px;" src="img/icon_tab_sy_1.png">
@@ -119,14 +119,13 @@
 	</body>
 
 	<script>
-
 		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
 			data: {
 				showStatus: true,
 				taskDatas: [],
-				selTab:0
+				selTab: 0
 			},
 			mounted() {
 				this.getData(0);
@@ -153,9 +152,26 @@
 					window.alert('复制成功')
 				},
 				submitTask: function(v1, v2, v3) {
-					location.href = "submit_task.html?id=" + v1 + "&taskName=" + decodeURI(v2) + "&taskMoney=" + v3;
+					// location.href = "submit_task.html?id=" + v1 + "&taskName=" + decodeURI(v2) + "&taskMoney=" + v3;
+					var tag = confirm("是否已完成任务");
+					if (tag) {
+						ajax({
+							method: 'POST',
+							url: SUBMIT_TASK + "?access-token=" + localStorage.getItem('access-token'),
+							data: {
+								// img: fileUrl,
+								id: v1
+							},
+							success: function(obj) {
+								alert(obj.message);
+								if(obj.success){
+									window.location.reload()
+								}
+							}
+						})
+					}
 				},
-				Task: function(ID, add_time, img, link, name, task_name, weixin, integral,status,platform) {
+				Task: function(ID, add_time, img, link, name, task_name, weixin, integral, status, platform) {
 					var task = new Object();
 					task.ID = ID;
 					task.add_time = add_time;
@@ -165,26 +181,26 @@
 					task.task_name = task_name;
 					task.weixin = weixin;
 					task.integral = StringToFloat(integral);
-					
-					if(status == "1"){
+
+					if (status == "1") {
 						task.state = '审核中';
-					}else if(status == "2"){
+					} else if (status == "2") {
 						task.state = '已完成';
 					}
-					
-					switch(platform){
+
+					switch (platform) {
 						case "1":
-						task.org = "抖音任务"
-						break;
+							task.org = "抖音任务"
+							break;
 						case "2":
-						task.org = "快手任务"
-						break;
+							task.org = "快手任务"
+							break;
 						case "3":
-						task.org = "微视任务"
-						break;
+							task.org = "微视任务"
+							break;
 						case "4":
-						task.org = "火山任务"
-						break;
+							task.org = "火山任务"
+							break;
 					}
 
 					return task;

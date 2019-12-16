@@ -49,6 +49,8 @@ var UPDATA_PAY = host + "level/upgrade";
 var APPLY_CAPTITAL = host + "member/apply-withdraw";
 //提现记录
 var CASH_LIST = host + "member/withdraw-detail";
+//更新
+var UPDATA_INDEX = host + "update/update-index";
 
 
 var longTime = 0;

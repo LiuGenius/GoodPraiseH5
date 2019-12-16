@@ -122,6 +122,10 @@
 						},
 						success: function(obj) {
 							var bankinfo = obj.data.bank_info;
+							if(bankinfo == null){
+								alert('您还未设置提现账户');
+								location.href = "captial_account.html"
+							}
 							that.bankname = bankinfo.branch_name
 							that.username = bankinfo.name
 							that.endNum = (bankinfo.bank_card + "").substring(bankinfo.bank_card.length - 4,bankinfo.bank_card.length)
