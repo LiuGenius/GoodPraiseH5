@@ -43,6 +43,7 @@
 				user_pwd: localStorage.getItem("password")
 			},
 			mounted() {
+				checkVersionUpdata(UPDATA_INDEX);
 				if(localStorage.getItem('access-token') != '' && localStorage.getItem('access-token') != null){
 					var access_token = localStorage.getItem('access-token');
 					location.href = "main.html";

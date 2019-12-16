@@ -152,7 +152,6 @@
 
 	</body>
 	<script>
-		checkVersionUpdata(UPDATA_INDEX);
 		addEventTest();
 		var app = new Vue({
 			el: "#id_app",
@@ -165,6 +164,7 @@
 				selTab:0,
 			},
 			mounted() {
+				
 				this.getData();
 				var that = this;
 				setInterval(function(){

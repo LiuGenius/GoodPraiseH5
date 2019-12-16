@@ -30,6 +30,7 @@ function ajax(opt) {
 		xmlHttp.send(postData);
 	} else if (opt.method.toUpperCase() === 'GET') {
 		xmlHttp.open(opt.method, opt.url + '?' + postData, opt.async);
+		console.log(opt.url + '?' + postData)
 		xmlHttp.send(null);
 	}
 
@@ -60,48 +61,82 @@ function getLocalTime(nS) {
 
 function checkVersionUpdata(updataUrl) {
 	document.addEventListener('plusready', function() {
-		ajax({
-			method: 'GET',
-			dataType: "json",
-			url: updataUrl, //+ "?access-token=" + localStorage.getItem('access-token'),
-			data: {
-				// versionCode: plus.runtime.versionCode,
-				// version:plus.runtime.version,
-				name:'H59014AA1',
-				version:plus.runtime.version,
-				versionCode: plus.runtime.versionCode,
-				'access-token':localStorage.getItem('access-token')
-			},
-			success: function(obj) {
-				var data = obj.data;
-				console.log(data.update + "  wgtUrl: " + data.wgtUrl);
-				var isNeedUpdata = data.update; //是否需要更新
-				if (isNeedUpdata) {
-					var downloadUrl = data.wgtUrl;
-					if(downloadUrl == ''){
-						return;
-					}
-					//开始下载
-					var dtask = plus.downloader.createDownload(downloadUrl, {}, function(file, status) {
-						// 下载完成
-						if (status == 200) {
-							//开始安装
-							plus.runtime.install(file, {
-								force: false
-							}, function() {
-								plus.nativeUI.toast("升级成功,正在重启应用");
-								plus.runtime.restart();
-							}, function(e) {
-								plus.nativeUI.toast("更新失败" + e.message);
-							});
-						} else {
-							plus.nativeUI.toast("下载更新文件失败");
+		plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
+			// console.log(JSON.stringify(widgetInfo))
+			// console.log("version: " + version + "  versionCode:" + versionCode)
+			ajax({
+				method: 'GET',
+				dataType: "json",
+				url: updataUrl, //+ "?access-token=" + localStorage.getItem('access-token'),
+				data: {
+					// versionCode: plus.runtime.versionCode,
+					// version:plus.runtime.version,
+					name: 'fans',
+					version: widgetInfo.version,
+					versionCode: widgetInfo.versionCode
+				},
+				success: function(obj) {
+					var data = obj.data;
+					console.log(JSON.stringify(obj));
+					var isNeedUpdata = data.update; //是否需要更新
+					if (isNeedUpdata) {
+						var downloadUrl = data.wgtUrl;
+						if (downloadUrl == '') {
+							return;
 						}
-					});
-					dtask.start();
+						downfile(downloadUrl, (res, url) => {
+							if (res == 1) {
+								plus.runtime.install(url, {}, function() {
+									// plus.nativeUI.toast("升级成功,正在重启应用");
+									plus.runtime.restart();
+								}, function(e) {
+									plus.nativeUI.toast("更新失败" + e.message);
+								});
+							} else {
+								plus.nativeUI.toast("更新失败" + e.message);
+							}
+						})
+						return;
+						//开始下载
+						// var dtask = plus.downloader.createDownload(downloadUrl, {}, function(file, status) {
+						// 	// 下载完成
+						// 	if (status == 200) {
+						// 		console.log(file.filename)
+						// 		//开始安装
+						// 		plus.runtime.install(file, {
+						// 			force: true
+						// 		}, function() {
+						// 			plus.nativeUI.toast("升级成功,正在重启应用");
+						// 			plus.runtime.restart();
+						// 		}, function(e) {
+						// 			plus.nativeUI.toast("更新失败" + e.message);
+						// 			console.log(e.message)
+						// 		});
+						// 	} else {
+						// 		plus.nativeUI.toast("下载更新文件失败");
+						// 	}
+						// });
+						// dtask.start();
+					}
 				}
-			}
+			})
 		})
+
 	}, false);
-	
+
+}
+
+function downfile(photoPath, callback) {
+	var dtask = plus.downloader.createDownload(photoPath, {}, function(d, status) {
+		// 下载完成
+		if (status == 200) {
+			plus.io.resolveLocalFileSystemURL(d.filename, function(entry) {
+				callback(1, entry.fullPath)
+			});
+			//dtask.clear()
+		} else {
+			callback(0)
+		}
+	});
+	dtask.start();
 }
