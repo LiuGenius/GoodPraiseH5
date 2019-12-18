@@ -1,4 +1,4 @@
-var host = "http://fans.yc699.com/v1/";
+var host = "http://fans.20b.me/v1/";
 
 var access_token = "";
 //登录

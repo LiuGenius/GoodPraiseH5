@@ -50,7 +50,7 @@
 				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;">提现账户</span>
 			</div>
-
+<!-- 
 				<select v-model="bank_id" class="border_input">
 				<option :value="bank.ID" style="height: 40px;background: #FFFFFF;" v-for="bank in bank_list">{{bank.name}}</option>
 			</select>
@@ -62,137 +62,137 @@
 			<input v-model="bank_card" type="number" placeholder="请输入银行卡号" class="border_input"/>
 		
 			<p @click="submit()" style="width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;margin-top: 40px;border-radius: 4px;">确认</p>
-
-			<!-- <p style="margin-left: 12px;margin-top: 12PX;">微信收款码</p>
+ -->
+			<p style="margin-left: 12px;margin-top: 12PX;">微信收款码</p>
 			<img id="id_img1" @click="chooseFile(1)" style="width: 93%;margin-left: 3.5%;margin-top: 4PX;" :src="wechatCode" />
 			<p style="margin-left: 12px;margin-top: 12PX;">支付宝收款码</p>
 			<img id="id_img2" @click="chooseFile(2)" style="width: 93%;margin-left: 3.5%;margin-top: 4PX;" :src="alipayCode" />
 			<form enctype="multipart/form-data" id="uploadForm">
 				<input onchange="showPicture(this)" style="display: none;" accept="image/*" id="id_file" type="file" />
-			</form> -->
+			</form>
 		</div>
 	</body>
 	<script>
 		addEventTest();
-		// var fileUrl = '';
-		// var getType = 0;
+		var fileUrl = '';
+		var getType = 0;
 
-		// function showPicture(imgFile) {
-		// 	document.getElementById("id_img" + getType).src = window.URL.createObjectURL(imgFile.files[0]);
-		// 	var formData = new FormData();
-		// 	formData.append('img', imgFile.files[0]);
-		// 	//ajax请求
-		// 	$.ajax({
-		// 		type: "post",
-		// 		url: UPDATA_IMAGE + "?access-token=" + localStorage.getItem('access-token'),
-		// 		data: formData,
-		// 		dataType: 'json',
-		// 		processData: false, // 告诉jQuery不要去处理发送的数据
-		// 		contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-		// 		xhrFields: {
-		// 			withCredentials: true
-		// 		},
-		// 		async: true, //默认是true：异步，false：同步。
-		// 		success: function(data) {
-		// 			fileUrl = data.data.url;
-		// 			switch (getType) {
-		// 				case 1:
+		function showPicture(imgFile) {
+			document.getElementById("id_img" + getType).src = window.URL.createObjectURL(imgFile.files[0]);
+			var formData = new FormData();
+			formData.append('img', imgFile.files[0]);
+			//ajax请求
+			$.ajax({
+				type: "post",
+				url: UPDATA_IMAGE + "?access-token=" + localStorage.getItem('access-token'),
+				data: formData,
+				dataType: 'json',
+				processData: false, // 告诉jQuery不要去处理发送的数据
+				contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+				xhrFields: {
+					withCredentials: true
+				},
+				async: true, //默认是true：异步，false：同步。
+				success: function(data) {
+					fileUrl = data.data.url;
+					switch (getType) {
+						case 1:
 
-		// 					break;
-		// 				case 2:
+							break;
+						case 2:
 
-		// 					break;
-		// 			}
-		// 		},
-		// 		error: function(data) {
-		// 			console.log('请求异常');
-		// 		},
-		// 	});
-		// }
+							break;
+					}
+				},
+				error: function(data) {
+					console.log('请求异常');
+				},
+			});
+		}
 		var app = new Vue({
 			el: "#id_app",
 			data: {
-				// wechatCode: 'img/icon_add_img.png',
-				// alipayCode: 'img/icon_add_img.png',
-				bank_list:[],
-				bank_id:1,
-				branch_name:"",
-				name:"",
-				bank_card:"",
+				wechatCode: 'img/icon_add_img.png',
+				alipayCode: 'img/icon_add_img.png',
+				// bank_list:[],
+				// bank_id:1,
+				// branch_name:"",
+				// name:"",
+				// bank_card:"",
 			},
 			mounted() {
-				this.getUserSetting();
-				this.getBankInfo();
+				// this.getUserSetting();
+				// this.getBankInfo();
 			},
 			methods: {
-				// chooseFile: function(type) {
-				// 	document.getElementById("id_file").click();
-				// 	getType = type;
+				chooseFile: function(type) {
+					getType = type;
+					document.getElementById("id_file").click();
+				},
+				// Bank(ID,name){
+				// 	var bank = new Object();
+				// 	bank.ID = ID;
+				// 	bank.name = name;
+				// 	return bank;
+				// },
+				// getBankInfo(){
+				// 	var that = this;
+				// 	ajax({
+				// 		method: 'POST',
+				// 		url: BANK_LIST + "?access-token=" + localStorage.getItem('access-token'),
+				// 		success: function(obj) {
+				// 			if (obj.success) {
+				// 				for (var i = 0; i < obj.data.length; i++) {
+				// 					var bank = obj.data[i];
+				// 					that.bank_list.push(that.Bank(
+				// 						bank.ID,bank.name
+				// 					));
+				// 				}
+				// 			} 
+				// 		}
+				// 	})
+				// },
+				// submit(){
+				// 	var that = this;
+				// 	ajax({
+				// 		method: 'POST',
+				// 		url: MY_BANK_INFO + "?access-token=" + localStorage.getItem('access-token'),
+				// 		data:{
+				// 			branch_name:that.branch_name,
+				// 			name:that.name,
+				// 			bank_card:that.bank_card,
+				// 			bank_id:that.bank_id
+				// 		},
+				// 		success: function(obj) {
+				// 			alert(obj.message)
+				// 			if(obj.success){
+				// 				history.back();
+				// 			}
+				// 		}
+				// 	})
+				// },
+				// getUserSetting(){
+				// 	var that = this;
+				// 	ajax({
+				// 		method: 'GET',
+				// 		url: MY_BANK_INFO,
+				// 		data:{
+				// 			"access-token":localStorage.getItem('access-token')
+				// 		},
+				// 		success: function(obj) {
+				// 			console.log(obj)
+				// 			if (obj.success) {
+				// 				if(obj.data == null){
+				// 					return;
+				// 				}
+				// 				that.branch_name = obj.data.branch_name;
+				// 				that.name = obj.data.name;
+				// 				that.bank_card = obj.data.bank_card;
+				// 				that.bank_id = obj.data.bank_id;
+				// 			} 
+				// 		}
+				// 	})
 				// }
-				Bank(ID,name){
-					var bank = new Object();
-					bank.ID = ID;
-					bank.name = name;
-					return bank;
-				},
-				getBankInfo(){
-					var that = this;
-					ajax({
-						method: 'POST',
-						url: BANK_LIST + "?access-token=" + localStorage.getItem('access-token'),
-						success: function(obj) {
-							if (obj.success) {
-								for (var i = 0; i < obj.data.length; i++) {
-									var bank = obj.data[i];
-									that.bank_list.push(that.Bank(
-										bank.ID,bank.name
-									));
-								}
-							} 
-						}
-					})
-				},
-				submit(){
-					var that = this;
-					ajax({
-						method: 'POST',
-						url: MY_BANK_INFO + "?access-token=" + localStorage.getItem('access-token'),
-						data:{
-							branch_name:that.branch_name,
-							name:that.name,
-							bank_card:that.bank_card,
-							bank_id:that.bank_id
-						},
-						success: function(obj) {
-							alert(obj.message)
-							if(obj.success){
-								history.back();
-							}
-						}
-					})
-				},
-				getUserSetting(){
-					var that = this;
-					ajax({
-						method: 'GET',
-						url: MY_BANK_INFO,
-						data:{
-							"access-token":localStorage.getItem('access-token')
-						},
-						success: function(obj) {
-							console.log(obj)
-							if (obj.success) {
-								if(obj.data == null){
-									return;
-								}
-								that.branch_name = obj.data.branch_name;
-								that.name = obj.data.name;
-								that.bank_card = obj.data.bank_card;
-								that.bank_id = obj.data.bank_id;
-							} 
-						}
-					})
-				}
 			}
 		});
 	</script>
