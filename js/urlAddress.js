@@ -51,6 +51,8 @@ var APPLY_CAPTITAL = host + "member/apply-withdraw";
 var CASH_LIST = host + "member/withdraw-detail";
 //更新
 var UPDATA_INDEX = host + "update/update-index";
+//更新提现二维码
+var UPDATA_QRCODE = host + "/member/withdraw-image";
 
 
 var longTime = 0;
