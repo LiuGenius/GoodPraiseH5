@@ -49,6 +49,9 @@
 			<div style="background: #FFFFFF;">
 				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;">提现账户</span>
+				<span @click="goCaptial()" style="margin-right: 10px;float: right;line-height: 50px;">
+					去提现
+				</span>
 			</div>
 			<!-- 
 				<select v-model="bank_id" class="border_input">
@@ -105,7 +108,6 @@
 		}
 
 		function updataQrcode(type, url) {
-			console.log("type: " + type + " url:" + url)
 			ajax({
 				method: 'POST',
 				url: UPDATA_QRCODE + "?access-token=" + localStorage.getItem('access-token'),
@@ -114,10 +116,11 @@
 					url: url
 				},
 				success: function(obj) {
-					console.log(obj)
+					alert(obj.message)
 				}
 			})
 		}
+		
 		var app = new Vue({
 			el: "#id_app",
 			data: {
@@ -125,11 +128,33 @@
 				alipayCode: 'img/icon_add_img.png'
 			},
 			mounted() {
+				this.getQrcode();
 			},
 			methods: {
 				chooseFile: function(type) {
 					getType = type;
 					document.getElementById("id_file").click();
+				},
+				getQrcode:function() {
+					var that = this;
+					ajax({
+						method: 'GET',
+						url: UPDATA_QRCODE,// + "?access-token=" + localStorage.getItem('access-token'),
+						data: {
+							'access-token':localStorage.getItem('access-token')
+						},
+						success: function(obj) {
+							that.wechatCode = obj.data.weixinUrl == '' ? 'img/icon_add_img.png' : obj.data.weixinUrl;
+							that.alipayCode = obj.data.alipayUrl == '' ? 'img/icon_add_img.png' : obj.data.alipayUrl;
+						}
+					})
+				},
+				goCaptial(){
+					if(this.wechatCode == "img/icon_add_img.png" && this.alipayCode == "img/icon_add_img.png"){
+						alert('至少设置一种提现方式才能提现');
+					}else{
+						location.href = "captial.html"
+					}
 				}
 			}
 		});

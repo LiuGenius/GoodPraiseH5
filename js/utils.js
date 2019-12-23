@@ -11,6 +11,10 @@ function ajax(opt) {
 	opt.url = opt.url || '';
 	opt.async = opt.async || true;
 	opt.data = opt.data || null;
+	if(opt.data != null){
+		opt.data.pageSize = 1000;
+		opt.data.page = 1;
+	}
 	opt.success = opt.success || function() {};
 	var xmlHttp = null;
 	if (XMLHttpRequest) {
@@ -36,7 +40,14 @@ function ajax(opt) {
 
 	xmlHttp.onreadystatechange = function() {
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			opt.success(JSON.parse(xmlHttp.responseText)); //如果不是json数据可以去掉json转换
+			console.log()
+			if(xmlHttp.responseText.indexOf("access-token无效") != -1){
+				alert("当前账号在其他设备登录!!!");
+				location.href = "login.html";
+				localStorage.setItem("access-token","");
+			}else{
+				opt.success(JSON.parse(xmlHttp.responseText)); //如果不是json数据可以去掉json转换
+			}
 		}
 	};
 }

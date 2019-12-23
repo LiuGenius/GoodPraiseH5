@@ -92,9 +92,27 @@
 					var capital = new Object();
 					capital.time = add_time;
 					capital.money = integral;
-					capital.remake = source == '0' ? '任务收入' : '团队收入';
+					switch(parseInt(source)){
+						case 0:
+						capital.remake = '任务收益';
+						break;
+						case 10:
+						capital.remake = '团队收益';
+						break;
+						case 6:
+						capital.remake = '推荐奖励';
+						break;
+						case 16:
+						capital.remake = '提现';
+						capital.money = "- " + integral
+						break;
+						case 9:
+						capital.remake = '领导奖励';
+						break;
+					}
 					return capital;
-				}
+				},
+				
 			}
 		});
 	</script>

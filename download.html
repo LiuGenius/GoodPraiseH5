@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html style="height:100%">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>APP下载</title>
+		<style type="text/css">
+			p {
+				margin-top: 20px;
+				height: 40px;
+				line-height: 40px;
+				background: #ececec;
+				border-radius: 4px;
+				border: #a5a5a5 solid 1px;
+			}
+		</style>
+	</head>
+	<body style="text-align: center;">
+		<img src="./logo.png" style="width: 100px;height: 100px;margin-top: 100px;" />
+		<h1>全民乐派</h1>
+		<p onclick="download(1)">Android下载</p>
+		<p onclick="download(2)">IOS下载</p>
+	</body>
+	
+	<script type="text/javascript">
+		function download(tag) {
+			switch (tag) {
+				case 1:
+					window.location = './全民乐派.apk';
+					break;
+				case 2:
+					alert('暂未上线')
+					break;
+			}
+		}
+	</script>
+</html>
+

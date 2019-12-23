@@ -71,7 +71,18 @@
 					var history = new Object();
 					history.price = price;
 					history.order_no = order_no;
-					history.status = (status == '0') ? "成功" : "失败";
+					switch(status){
+						case 0:
+						history.status =  "待审核";
+						break;
+						case 1:
+						history.status =  "支付成功";
+						break;
+						case 2:
+						history.status =  "支付失败";
+						break;
+					}
+					
 					history.account = account;
 					history.add_time = add_time;
 					return history;

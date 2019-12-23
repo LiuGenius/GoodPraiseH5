@@ -1,5 +1,7 @@
-var host = "http://fans.20b.me/v1/";
+var host = "http://fans.20b.me/v1/";//fans.yc699.com
 
+
+var register_url = "http://fans.20b.me/reg/register.html";
 var access_token = "";
 //登录
 var LOGIN = host + "member/login";
@@ -52,7 +54,9 @@ var CASH_LIST = host + "member/withdraw-detail";
 //更新
 var UPDATA_INDEX = host + "update/update-index";
 //更新提现二维码
-var UPDATA_QRCODE = host + "/member/withdraw-image";
+var UPDATA_QRCODE = host + "member/withdraw-image";
+//
+var sss = host + "member/source-info";
 
 
 var longTime = 0;

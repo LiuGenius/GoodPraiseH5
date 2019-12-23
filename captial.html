@@ -85,7 +85,7 @@
 			<p style="margin-left: 12px;margin-top: 12px;">提现金额</p>
 			<div>
 				<span style="font-weight: 400;font-size: 20px;position: relative;left: 20px;top: 4px;">¥</span>
-				<input :class="isError ? 'border_input_sel':'border_input'" @input="feeChange()" v-model="captial" type="number" placeholder=""/>
+				<input :class="isError ? 'border_input_sel':'border_input'" @input="feeChange()" v-model="captial" type="tel" placeholder=""/>
 			</div>
 			 <transition name="slide-fade">
 			    <p v-if="isError" style="margin-left: 12px;margin-top: 4px;font-size: 12px;color: red;">提现额度不足</p>
@@ -122,20 +122,20 @@
 						},
 						success: function(obj) {
 							var bankinfo = obj.data.bank_info;
-							if(bankinfo == null){
-								alert('您还未设置提现账户');
-								location.href = "captial_account.html"
-							}
-							that.bankname = bankinfo.branch_name
-							that.username = bankinfo.name
-							that.endNum = (bankinfo.bank_card + "").substring(bankinfo.bank_card.length - 4,bankinfo.bank_card.length)
-							that.captial_fee = obj.data.balance;
+							// if(bankinfo == null){
+							// 	alert('您还未设置提现账户');
+							// 	location.href = "captial_account.html"
+							// }
+							// that.bankname = bankinfo.branch_name
+							// that.username = bankinfo.name
+							// that.endNum = (bankinfo.bank_card + "").substring(bankinfo.bank_card.length - 4,bankinfo.bank_card.length)
+							that.captial_fee = StringToFloat(obj.data.balance);
 						}
 					})
 				},
 				submit:function(){
 					var that = this;
-					if(isError){
+					if(that.isError){
 						return;
 					}
 					ajax({

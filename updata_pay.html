@@ -29,7 +29,7 @@
 		<div id="id_app">
 			<p style="height: 40px;text-align: center;line-height: 40px;background: #FFFFFF;margin: 0px;">购买</p>
 			<ul id="id_list" style="margin: 2%;">
-				<li style="color: #FFFFFF;margin: 1%;overflow: hidden;" v-for="(data,index) in datas ">
+				<li v-if="data.isShow" style="color: #FFFFFF;margin: 1%;overflow: hidden;" v-for="(data,index) in datas ">
 					<!-- <img src="img/季度卡.png" style="width: 100%;"/> -->
 					<div :style="`padding: 3% 3% 0% 3%;background: url(img/${data.img}.png);background-size: 100% 100%;`">
 						<span style="font-weight: bold;">{{data.name}}</span>
@@ -37,7 +37,9 @@
 						<p style="margin-left: 20px;margin-top: 20px;">每天可做任务: {{data.task_count}}个</p>
 						<p style="margin-left: 20px;margin-top: -4px;">{{data.description}}</p>
 						<p style="margin-left: 20px;margin-top: -4px;">直接邀请同伴奖励: {{data.direct_rate}} %</p>
-						<p @click="pay(data.name,data.price,data.ID)" style="width: 100%;text-align: center;height: 40px;line-height: 40px;">立即升级(剩余:{{data.surplus}})</p>
+						 <p style="width: 100%;margin-top: -15px;">&nbsp;</p>
+						<span @click="pay(data.name,data.price,data.ID)" style="text-align: center;width: 40%;margin-left: 30%;background: #FFFFFF;color: #1B6D85;padding-left: 12px;padding-right: 12px;padding-top: 8px;padding-bottom: 8px;border-radius: 4px;">立即升级(剩余:{{data.surplus}})</span>
+						<p>&nbsp;</p>
 					</div>
 				</li>
 			</ul>
@@ -71,14 +73,40 @@
 			data: {
 				datas: [],
 				imgArrays: ["level_1", "level_2", "level_3"],
+				isDq: false,
+				level_name: '',
+				lastPayMoney: 0,
+				isShowTips:true,
+				level:0
 			},
 			mounted() {
-				this.getData();
+				var that = this;
+				ajax({
+					method: 'POST',
+					url: USER_INFO + "?access-token=" + localStorage.getItem('access-token'),
+					success: function(obj) {
+						if (obj.success) {
+							var level_expire = obj.data.level_expire == '无' ? "1999-12-12" : obj.data.level_expire;
+							that.isDq = new Date(level_expire).getTime() < new Date().getTime();
+							that.level_name = obj.data.level_name;
+							that.lastPayMoney = obj.data.lastPayMoney;
+							that.level = obj.data.level;
+						}
+						that.getData();
+					}
+				})
+				
 			},
 			methods: {
 				pay: function(levelName, levelPrice, level_id) {
-					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + levelPrice + "&level_id=" +
-						level_id);
+					var money = 0;
+					if (levelName == this.level_name || this.isDq) {
+						money = levelPrice;
+					} else {
+						money = levelPrice - this.lastPayMoney
+					}
+					location.href = decodeURI("updata.html?levelName=" + levelName + "&levelPrice=" + money + "&level_id=" +
+						level_id + "&level_name=" + this.level_name + "&yuanjia=" + levelPrice);
 				},
 				Packge: function(ID, add_time, description, name, price, sort, status, task_count, type, img, surplus,
 					direct_rate) {
@@ -95,51 +123,48 @@
 					data.img = img;
 					data.surplus = surplus;
 					data.direct_rate = direct_rate;
+					
+					
+					if(this.isDq){
+						data.isShow = true;
+					}else{
+						data.isShow = parseInt(data.ID) > this.level;
+					}
+					if(data.isShow){
+						this.isShowTips = false;
+					}
 					return data;
 				},
 				getData: function() {
 					var that = this;
 					ajax({
 						method: 'POST',
-						url: USER_INFO + "?access-token=" + localStorage.getItem('access-token'),
+						url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
 						success: function(obj) {
 							if (obj.success) {
-								if (obj.data.level_name == '普通会员') {
-									ajax({
-										method: 'POST',
-										url: PACKAGE_LIST + "?access-token=" + localStorage.getItem('access-token'),
-										success: function(obj) {
-											if (obj.success) {
-												for (var i = 0; i < obj.data.length; i++) {
-													var packge = obj.data[i];
-													that.datas.push(that.Packge(
-														packge.ID,
-														packge.add_time,
-														packge.description,
-														// '这里是描述',
-														packge.name,
-														StringToFloat(packge.price),
-														packge.sort,
-														packge.status,
-														packge.max,
-														packge.type,
-														that.imgArrays[i % 3],
-														packge.count,
-														packge.direct_rate
-													));
-												}
-											}
-										}
-									})
-								} else {
-									alert('您已经购买过会员了!');
-									history.back();
+								for (var i = 0; i < obj.data.length; i++) {
+									var packge = obj.data[i];
+									that.datas.push(that.Packge(
+										packge.ID,
+										packge.add_time,
+										packge.description,
+										packge.name,
+										StringToFloat(packge.price),
+										packge.sort,
+										packge.status,
+										packge.max,
+										packge.type,
+										that.imgArrays[i % 3],
+										packge.count,
+										packge.direct_rate
+									));
+								}
+								if(that.isShowTips){
+									alert('您当前已经是最高级别,到期后可续费');
 								}
 							}
 						}
 					})
-
-
 				}
 			}
 		});

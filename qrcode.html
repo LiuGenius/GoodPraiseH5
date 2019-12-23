@@ -12,6 +12,8 @@
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 		<script src="js/qrcode.min.js" type="text/javascript" charset="utf-8"></script>
 		<title>推广赚钱</title>
+		<style>
+		</style>
 	</head>
 	<body style="background: url(img/bg_tgzq.png);background-size: 100%;">
 		<div id="id_app">
@@ -19,18 +21,22 @@
 				<img onclick="history.back()" style="width: 50px;height: 50px;padding: 18px;" src="img/icon_back.png" />
 				<span style="margin-top: 4px;margin-left: -10px;width: 70%;">推广赚钱</span>
 			</div>
-			<div style="padding: 8px;margin: 26.5%;margin-top: 200px;width: 100%;text-align: center;" id="qrcode"></div>
+			<div style="text-align: center;width: 50%;margin-left: 25%;">
+				<div style="padding: 8px;margin-top: 240px;width: 100%;text-align: center;background: #FFFFFF;border-radius: 8px;width: 176px;" id="qrcode"></div>
+			</div>
+			
 		</div>
 	</body>
 	<script>
 		addEventTest();
 		var qrcode = new QRCode("qrcode", {
-		    text: "http://fans.yc699.com/reg/register.html?uid=" + GetQueryString("uid"),
+		    text: "http://fans.20b.me/reg/register.html?uid=" + GetQueryString("uid"),
 		    width: 160,
 		    height: 160,
 		    colorDark : "#000000",
 		    colorLight : "#ffffff",
 		    correctLevel : QRCode.CorrectLevel.H
 		});
+		
 	</script>
 </html>

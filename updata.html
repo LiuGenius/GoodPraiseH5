@@ -36,7 +36,13 @@
 			<p @click="downloadIamge()" style="width: 90%;margin-left: 5%;text-align: center;height: 40px;line-height: 40px;background: #8BC34A;color: #FFFFFF;margin-top: 10px;">查看二维码图片</p>
 
 			<p style="margin-left: 5%;margin-right: 5%;">
-				{{levelName}}: ¥ {{levelPrice}}<br />
+				当前会员等级:  {{level_name}}<br />
+			</p>
+			<p style="margin-left: 5%;margin-right: 5%;">
+				{{levelName}}: ¥ {{yuanjia}}<br />
+			</p>
+			<p style="margin-left: 5%;margin-right: 5%;color: red;">
+				还需支付: ¥ {{levelPrice}}<br />
 			</p>
 
 			<p style="margin-left: 5%;margin-right: 5%;">
@@ -66,6 +72,8 @@
 				level_id: GetQueryString("level_id"),
 				alipayAccount: '',
 				alipayQrCode: '',
+				level_name:GetQueryString('level_name'),
+				yuanjia:GetQueryString('yuanjia')
 
 			},
 			mounted() {

@@ -57,11 +57,11 @@
 			<p style="height: 40px;text-align: center;line-height: 40px;background: #FFFFFF;margin: 0px;">任务</p>
 			<div style="background: #FFFFFF;">
 				<div @click="clickTab(0)" class="tab">
-					<img style="width: 12px;" src='img/douying.png' />
+					<!-- <img style="width: 12px;" src='img/douying.png' /> -->
 					<span :style="selTab == 0 ? 'color:red':''">待完成</span>
 				</div>
 				<div @click="clickTab(1)" class="tab">
-					<img style="width: 12px;" src='img/douying.png' />
+					<!-- <img style="width: 12px;" src='img/douying.png' /> -->
 					<span :style="selTab == 1 ? 'color:red':''">已完成</span>
 				</div>
 			</div>
@@ -211,7 +211,9 @@
 						method: 'POST',
 						url: MY_TASK_LIST + "?access-token=" + localStorage.getItem('access-token'),
 						data: {
-							status: status
+							status: status,
+							pageSize:1000,
+							page:1
 						},
 						success: function(obj) {
 							if (obj.success) {

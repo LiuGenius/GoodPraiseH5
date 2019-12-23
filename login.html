@@ -28,7 +28,8 @@
 
 			<input v-model="user_pwd" type="password" placeholder="请输入登录密码" style="width: 94%;height: 40px;margin-top: 20px;margin-left: 3%;padding-left: 10px;outline: none;border: #DBDBDB solid 1px;border-radius: 4px;" />
 
-			<p style="margin-left: 12px;display: none;" onclick="location.href='register.html'">注册</p>
+
+			<p style="margin-left: 12px;margin-top: 12px;" onclick="location.href='forget_password.html'">忘记密码</p>
 			<p @click="login()" style="margin-top: 50px;width: 94%;margin-left: 3%;height: 40px;background: #23527C;color: #fff;text-align: center;line-height: 40px;border-radius: 4px;margin-top: 40px;">登录</p>
 
 		</div>
@@ -42,7 +43,6 @@
 				user_pwd: localStorage.getItem("password")
 			},
 			mounted() {
-				checkVersionUpdata(UPDATA_INDEX);
 				addEventTest();
 				if(localStorage.getItem('access-token') != '' && localStorage.getItem('access-token') != null){
 					var access_token = localStorage.getItem('access-token');

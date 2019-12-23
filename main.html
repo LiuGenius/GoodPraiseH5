@@ -59,13 +59,12 @@
 				font-size: 12px;
 				font-weight: 100;
 			}
-			.selTabText{
+
+			.selTabText {
 				color: red;
 			}
-			.noselTabText{
-			}
-			
-			
+
+			.noselTabText {}
 		</style>
 	</head>
 	<body style="background: #f0f0f0;">
@@ -100,7 +99,7 @@
 								<img :src="title.logo" style="width: 20px;height: 20px;">
 								<p :class="(index == selTab) ? 'selTabText':'noselTabText'" style="font-size: 16px;display: inline-block;position: relative;top: 2px;left: 4px;">{{title.name}}</p>
 							</div>
-							
+
 						</li>
 					</ul>
 				</div>
@@ -125,7 +124,7 @@
 					</div>
 				</li>
 			</ul>
-			
+
 		</div>
 		<p style="height: 70px;"></p>
 
@@ -159,26 +158,27 @@
 				titleList: [],
 				datas: [],
 				bannerList: [],
-				cIndex:0,
-				isHaveData:false,
-				selTab:0,
+				cIndex: 0,
+				isHaveData: false,
+				selTab: 0,
 			},
 			mounted() {
-				
 				this.getData();
+
+				checkVersionUpdata(UPDATA_INDEX);
 				var that = this;
-				setInterval(function(){
+				setInterval(function() {
 					++that.cIndex;
-					if(that.cIndex == that.bannerList.length){
+					if (that.cIndex == that.bannerList.length) {
 						that.cIndex = 0;
 					}
-				},5000)
+				}, 5000)
 			},
 			methods: {
 				/**
 				 * @param {Object} ID切换tab
 				 */
-				clickTab: function(ID,index) {
+				clickTab: function(ID, index) {
 					var that = this;
 					ajax({
 						method: 'POST',
@@ -186,7 +186,9 @@
 						url: TASK_LIST + "?access-token=" + localStorage.getItem('access-token'),
 						data: {
 							platform: ID,
-							name: ''
+							name: '',
+							pageSize: 1000,
+							page: 1
 						},
 						success: function(obj) {
 							if (obj.success) {
@@ -201,13 +203,13 @@
 										dataitem.link,
 										dataitem.phone,
 										dataitem.task_name,
-										"0.5"
+										StringToFloat(dataitem.integral)
 									))
 								}
 								that.selTab = index;
-								if(that.datas.length == 0){
+								if (that.datas.length == 0) {
 									that.isHaveData = true;
-								}else{
+								} else {
 									that.isHaveData = false;
 								}
 
@@ -218,7 +220,7 @@
 				/**
 				 * 接取任务
 				 */
-				receiveTask: function(id,index) {
+				receiveTask: function(id, index) {
 					var that = this;
 					ajax({
 						method: 'POST',
@@ -230,7 +232,7 @@
 						success: function(obj) {
 							if (obj.success) {
 								alert("任务接取成功")
-								that.datas.splice(index,1)
+								that.datas.splice(index, 1)
 							} else {
 								alert(obj.message)
 							}
