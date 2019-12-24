@@ -58,7 +58,8 @@
 			</div>
 			
 			<ul style="margin-top: 3%;">
-				<li v-for="data in datas" style="background: #FFFFFF;height: 50px;line-height: 50px;padding-left: 12px;padding-right: 12px;border-bottom: #E5E5E5 solid 1px;">
+				<li v-for="data in datas" style="background: #FFFFFF;line-height: 35px;padding-left: 12px;padding-right: 12px;border-bottom: #E5E5E5 solid 1px;">
+					<p>姓名:{{data.name}}</p>
 					<div>
 						<span>{{data.username}}</span>
 						<span style="font-size: 15px;float: right;">{{data.add_time}}</span>
@@ -102,11 +103,11 @@
 							if (obj.success) {
 								for (var i = 0; i < obj.data.level_1.length; i++) {
 									var user = obj.data.level_1[i];
-									that.level_1.push(that.userData(user.phone,user.add_time));
+									that.level_1.push(that.userData(user.phone,user.add_time,user.name));
 								}
 								for (var i = 0; i < obj.data.level_2.length; i++) {
 									var user = obj.data.level_2[i];
-									that.level_2.push(that.userData(user.phone,user.add_time));
+									that.level_2.push(that.userData(user.phone,user.add_time,user.name));
 								}
 								that.one_userNum = that.level_1.length;
 								that.two_userNum = that.level_2.length;
@@ -115,10 +116,11 @@
 						}
 					})
 				},
-				userData:function(phone,add_time){
+				userData:function(phone,add_time,name){
 					var user = new Object();
 					user.username = phone;
 					user.add_time = add_time;
+					user.name = name;
 					return user;
 				}
 			}
